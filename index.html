@@ -368,6 +368,23 @@
         .lead-company { color: var(--green-500); font-size: 13px; margin-top: 2px; }
         .lead-title { color: var(--text-secondary); font-size: 12px; margin-top: 1px; }
 
+        /* ── Pricing badge ── */
+        .pricing-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            background: var(--interaction);
+            border: 1px solid #00cc50;
+            border-radius: 0;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--near-black);
+            margin-top: 3px;
+        }
+
         /* ── Committee badge ── */
         .committee-badge {
             display: inline-flex;
@@ -384,6 +401,10 @@
             color: var(--near-black);
             margin-top: 3px;
         }
+
+        /* ── Pricing row highlight ── */
+        .lead-table tbody tr.pricing-row { background: #f0fff5; }
+        .lead-table tbody tr.pricing-row:hover { background: #e5ffed; }
 
         /* ── Signals ── */
         .signals { display: flex; flex-wrap: wrap; gap: 4px; max-width: 340px; }
@@ -714,12 +735,14 @@ function renderLeads(leads) {
         const lcc=LC_CLASSES[l.lifecycle]||'lc-subscriber', lcl=LC_LABELS[l.lifecycle]||'-';
         const ds=l.signals.filter(s=>!s.startsWith('src:')&&!['MQL','Lead','Nurture','Subscriber'].includes(s));
         const pct=Math.round(l.demo_prob/73*100);
+        const hasPricing=l.signals.some(s=>s.includes('/pricing'));
         const row=document.createElement('tr');
+        if(hasPricing) row.className='pricing-row';
         row.innerHTML=`
             <td><div class="rank ${rc}">${i+1}</div></td>
             <td><div class="prob-cell ${pc}"><span class="prob-pct">${l.demo_prob}%</span><div class="prob-bar-bg"><div class="prob-bar" style="width:${pct}%"></div></div></div></td>
             <td><span class="intent-score">${l.score}</span></td>
-            <td><div class="lead-name">${l.name}</div><div class="lead-email">${l.email}</div>${l.company?`<div class="lead-company">${l.company}</div>`:''}${l.title?`<div class="lead-title">${l.title}</div>`:''}${l.committee>=2?`<span class="committee-badge">${l.committee} contacts</span>`:''}</td>
+            <td><div class="lead-name">${l.name}</div><div class="lead-email">${l.email}</div>${l.company?`<div class="lead-company">${l.company}</div>`:''}${l.title?`<div class="lead-title">${l.title}</div>`:''}${hasPricing?`<span class="pricing-badge">visited /pricing</span>`:''}${l.committee>=2?`<span class="committee-badge">${l.committee} contacts</span>`:''}</td>
             <td><span class="source-badge ${sc}">${sl}</span></td>
             <td><span class="lifecycle-cell ${lcc}">${lcl}</span></td>
             <td class="metric ${l.page_views>=100?'metric-highlight':''}">${l.page_views.toLocaleString()}</td>

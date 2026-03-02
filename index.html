@@ -4,519 +4,525 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pipeline by Intent Analyzer | AirOps</title>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Inconsolata:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* ── AirOps Brand Design System (Light) ── */
+        /* ── AirOps brand fonts ── */
+        @font-face { font-family: 'Serrif VF'; src: url('SerrifVF.ttf') format('truetype'); font-weight: 100 900; font-style: normal; }
+        @font-face { font-family: 'Saans'; src: url('Saans-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; }
+        @font-face { font-family: 'Saans'; src: url('Saans-Medium.ttf') format('truetype'); font-weight: 500; font-style: normal; }
+        @font-face { font-family: 'Saans'; src: url('Saans-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; }
+        @font-face { font-family: 'Saans Mono'; src: url('SaansMono-Medium.ttf') format('truetype'); font-weight: 500; font-style: normal; }
+
+        /* ── AirOps brand tokens ── */
         :root {
-            --ao-primary: #4d65ff;
-            --ao-primary-dim: rgba(77, 101, 255, 0.08);
-            --ao-primary-glow: rgba(77, 101, 255, 0.12);
-            --ao-bg: #ffffff;
-            --ao-surface: #ffffff;
-            --ao-surface-2: #F7F7F8;
-            --ao-border: #E2E2E6;
-            --ao-border-subtle: rgba(0, 0, 0, 0.08);
-            --ao-border-hover: rgba(0, 0, 0, 0.15);
-            --ao-text: #141414;
-            --ao-text-secondary: #4A4A56;
-            --ao-text-muted: #7B7B8E;
-            --ao-olive: #53613A;
-            --ao-olive-dim: rgba(111, 120, 60, 0.10);
-            --ao-rose: #A04848;
-            --ao-rose-dim: rgba(185, 100, 100, 0.10);
-            --ao-purple: #852952;
-            --ao-purple-dim: rgba(133, 41, 82, 0.08);
-            --ao-navy: #0F0F57;
-            --ao-green: #3D6B35;
-            --ao-green-bright: #3D8C33;
-            --ao-green-dim: rgba(61, 140, 51, 0.08);
-            --ao-amber: #A07D1C;
-            --ao-amber-dim: rgba(160, 125, 28, 0.08);
-            --font-serif: 'Merriweather', Georgia, serif;
-            --font-mono: 'Inconsolata', 'Courier New', monospace;
-            --font-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --white: #ffffff;
+            --off-white: #F8FFFA;
+            --near-black: #000d05;
+            --green-50: #f8fffb;
+            --green-100: #dfeae3;
+            --green-200: #CCFFE0;
+            --green-500: #008c44;
+            --green-600: #002910;
+            --interaction: #00ff64;
+            --accent-label: #EEFF8C;
+            --text-primary: #09090b;
+            --text-secondary: #676c79;
+            --text-tertiary: #a5aab6;
+            --stroke-primary: #ecedef;
+            --stroke-green: #d4e8da;
+            --highlight: #00e676;
+            --font-sans: 'Saans', 'Helvetica Neue', sans-serif;
+            --font-serif: 'Serrif VF', Georgia, serif;
+            --font-mono: 'Saans Mono', 'DM Mono', monospace;
+            --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+            --space-6: 24px; --space-8: 32px; --space-12: 48px; --space-16: 64px;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: var(--font-system);
-            background: var(--ao-bg);
-            color: var(--ao-text);
+            font-family: var(--font-sans);
+            background: var(--white);
+            color: var(--text-primary);
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             text-rendering: optimizeLegibility;
+            font-size: 16px;
+            line-height: 1.5;
         }
 
         /* ── Header ── */
         .header {
-            background: var(--ao-surface);
-            border-bottom: 1px solid var(--ao-border-subtle);
-            padding: 20px 40px;
+            background: var(--white);
+            border-bottom: 1px solid var(--stroke-primary);
+            padding: var(--space-6) var(--space-12);
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
-        .header-left { display: flex; align-items: center; gap: 16px; }
-        .logo-mark {
-            display: flex; align-items: center; gap: 10px;
-        }
-        .logo-mark svg { width: 32px; height: 32px; }
+        .header-left { display: flex; align-items: center; gap: var(--space-6); }
+        .logo-svg { height: 24px; width: auto; }
+        .header-divider { width: 1px; height: 24px; background: var(--stroke-primary); }
         .header-title {
-            font-family: var(--font-serif);
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: -0.3px;
-        }
-        .header-title span {
-            color: var(--ao-text-muted);
-            font-weight: 300;
-            font-family: var(--font-system);
+            font-family: var(--font-sans);
             font-size: 14px;
-            margin-left: 8px;
+            font-weight: 500;
+            color: var(--text-secondary);
         }
-        .header-right { display: flex; gap: 12px; align-items: center; }
-        .badge {
+        .header-right { display: flex; gap: var(--space-3); align-items: center; }
+
+        /* ── Pill / Label (brand spec) ── */
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            background: var(--accent-label);
+            border: 1px solid var(--stroke-green);
+            border-radius: 0;
             font-family: var(--font-mono);
             font-size: 11px;
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-weight: 700;
+            font-weight: 500;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            color: var(--near-black);
         }
-        .badge-live { background: var(--ao-green-dim); color: var(--ao-green-bright); border: 1px solid rgba(61, 140, 51, 0.2); }
-        .badge-hubspot { background: var(--ao-primary-dim); color: var(--ao-primary); border: 1px solid rgba(77, 101, 255, 0.15); }
-        .timestamp { color: var(--ao-text-muted); font-size: 12px; font-family: var(--font-mono); }
+        .pill-green {
+            background: var(--green-200);
+            border-color: var(--stroke-green);
+            color: var(--green-600);
+        }
+        .pill-outline {
+            background: transparent;
+            border: 1px solid var(--stroke-primary);
+            color: var(--text-secondary);
+        }
+        .timestamp {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+        }
 
-        /* ── TL;DR Section (AirOps brand voice) ── */
-        .tldr {
-            padding: 24px 40px 0;
-        }
+        /* ── TL;DR ── */
+        .tldr { padding: var(--space-8) var(--space-12) 0; }
         .tldr-card {
-            background: linear-gradient(135deg, rgba(61, 140, 51, 0.06), rgba(61, 140, 51, 0.02));
-            border: 1px solid rgba(61, 140, 51, 0.15);
-            border-radius: 8px;
-            padding: 20px 24px;
+            background: var(--green-50);
+            border: 1px solid var(--stroke-green);
+            border-radius: 0;
+            padding: var(--space-6);
         }
         .tldr-label {
             font-family: var(--font-mono);
             font-size: 11px;
-            font-weight: 700;
-            color: var(--ao-green-bright);
+            font-weight: 500;
+            color: var(--green-500);
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 10px;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-3);
         }
         .tldr-content {
+            font-family: var(--font-sans);
             font-size: 14px;
-            line-height: 1.7;
-            color: var(--ao-text-secondary);
+            line-height: 1.6;
+            color: var(--text-secondary);
         }
-        .tldr-content strong { color: var(--ao-text); font-weight: 700; }
-        .tldr-label { color: var(--ao-green); }
+        .tldr-content strong { color: var(--text-primary); font-weight: 600; }
 
-        /* ── Stats Row ── */
+        /* ── Stats ── */
         .stats-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            padding: 24px 40px;
+            gap: var(--space-4);
+            padding: var(--space-8) var(--space-12);
         }
         .stat-card {
-            background: var(--ao-surface);
-            border: 1px solid var(--ao-border-subtle);
-            border-radius: 8px;
-            padding: 20px 24px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            background: var(--white);
+            border: 1px solid var(--stroke-green);
+            border-radius: 0;
+            padding: var(--space-6);
         }
-        .stat-card:hover { border-color: var(--ao-border-hover); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); }
         .stat-label {
             font-family: var(--font-mono);
             font-size: 11px;
-            color: var(--ao-text-muted);
+            font-weight: 500;
+            color: var(--text-tertiary);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-2);
         }
         .stat-value {
             font-family: var(--font-serif);
-            font-size: 36px;
-            font-weight: 900;
-            line-height: 1;
+            font-size: 40px;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            line-height: 1.04;
+            color: var(--near-black);
         }
-        .stat-sub { font-size: 12px; color: var(--ao-text-muted); margin-top: 6px; }
-        .stat-value.green { color: var(--ao-green-bright); }
-        .stat-value.amber { color: var(--ao-amber); }
-        .stat-value.primary { color: var(--ao-primary); }
-        .stat-value.olive { color: var(--ao-olive); }
+        .stat-value.green { color: var(--green-500); }
+        .stat-sub {
+            font-family: var(--font-sans);
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-top: var(--space-1);
+        }
 
-        /* ── Scoring Methodology ── */
-        .methodology {
-            padding: 0 40px 8px;
-        }
+        /* ── Methodology ── */
+        .methodology { padding: 0 var(--space-12) var(--space-2); }
         .methodology-toggle {
             font-family: var(--font-mono);
-            font-size: 12px;
-            color: var(--ao-text-muted);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
             background: none;
             border: none;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 8px 0;
+            gap: var(--space-2);
+            padding: var(--space-2) 0;
             transition: color 0.2s;
         }
-        .methodology-toggle:hover { color: var(--ao-primary); }
+        .methodology-toggle:hover { color: var(--green-500); }
         .methodology-toggle .arrow { transition: transform 0.2s; font-size: 10px; }
         .methodology-toggle.open .arrow { transform: rotate(90deg); }
         .methodology-panel {
             display: none;
-            background: var(--ao-surface-2);
-            border: 1px solid var(--ao-border-subtle);
-            border-radius: 8px;
-            padding: 20px 24px;
-            margin-bottom: 16px;
+            background: var(--green-50);
+            border: 1px solid var(--stroke-green);
+            border-radius: 0;
+            padding: var(--space-6);
+            margin: var(--space-3) 0 var(--space-4);
         }
         .methodology-panel.open { display: block; }
         .method-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: var(--space-2);
         }
         .method-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 12px;
-            background: var(--ao-surface-2);
-            border-radius: 4px;
+            padding: var(--space-2) var(--space-3);
+            background: var(--white);
+            border: 1px solid var(--stroke-green);
+            border-radius: 0;
             font-size: 12px;
-            border: 1px solid var(--ao-border-subtle);
+            font-family: var(--font-sans);
         }
-        .method-item .label { color: var(--ao-text-secondary); }
+        .method-item .label { color: var(--text-secondary); }
         .method-item .pts {
             font-family: var(--font-mono);
-            font-weight: 700;
-            color: var(--ao-primary);
+            font-weight: 500;
+            color: var(--green-500);
+            font-size: 11px;
+            letter-spacing: 0.08em;
         }
 
         /* ── Controls ── */
         .controls {
-            padding: 0 40px 16px;
+            padding: 0 var(--space-12) var(--space-4);
             display: flex;
-            gap: 10px;
+            gap: var(--space-2);
             align-items: center;
             flex-wrap: wrap;
         }
         .search-box {
-            background: var(--ao-surface);
-            border: 1px solid var(--ao-border-subtle);
-            border-radius: 6px;
+            background: var(--white);
+            border: 1px solid var(--stroke-primary);
+            border-radius: 0;
             padding: 10px 14px;
-            color: var(--ao-text);
-            font-size: 13px;
-            font-family: var(--font-system);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 14px;
             width: 260px;
             outline: none;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.2s;
         }
-        .search-box:focus { border-color: var(--ao-primary); outline: 0.125rem solid rgba(77, 101, 255, 0.2); outline-offset: 0.125rem; }
-        .search-box::placeholder { color: var(--ao-text-muted); }
+        .search-box:focus { border-color: var(--green-500); }
+        .search-box::placeholder { color: var(--text-tertiary); }
         .filter-btn {
-            background: var(--ao-surface);
-            border: 1px solid var(--ao-border-subtle);
-            border-radius: 6px;
+            background: var(--white);
+            border: 1px solid var(--stroke-primary);
+            border-radius: 0;
             padding: 9px 16px;
-            color: var(--ao-text-muted);
-            font-size: 12px;
+            color: var(--text-secondary);
             font-family: var(--font-mono);
-            font-weight: 400;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
         .filter-btn:hover {
-            border-color: var(--ao-border-hover);
-            color: var(--ao-text-secondary);
+            border-color: var(--stroke-green);
+            color: var(--text-primary);
         }
         .filter-btn.active {
-            border-color: var(--ao-primary);
-            color: var(--ao-primary);
-            background: var(--ao-primary-dim);
+            background: var(--accent-label);
+            border-color: var(--stroke-green);
+            color: var(--near-black);
         }
         .sort-select {
-            background: var(--ao-surface);
-            border: 1px solid var(--ao-border-subtle);
-            border-radius: 6px;
+            background: var(--white);
+            border: 1px solid var(--stroke-primary);
+            border-radius: 0;
             padding: 9px 14px;
-            color: var(--ao-text-secondary);
-            font-size: 12px;
+            color: var(--text-secondary);
             font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
             cursor: pointer;
             outline: none;
             margin-left: auto;
         }
 
         /* ── Table ── */
-        .table-container { padding: 0 40px 40px; }
+        .table-container { padding: 0 var(--space-12) var(--space-8); }
         .lead-table {
             width: 100%;
             border-collapse: collapse;
-            background: var(--ao-surface);
-            border-radius: 8px;
+            background: var(--white);
+            border-radius: 0;
             overflow: hidden;
-            border: 1px solid var(--ao-border-subtle);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--stroke-green);
         }
         .lead-table thead th {
-            background: var(--ao-surface-2);
+            background: var(--green-50);
             padding: 14px 16px;
             text-align: left;
-            font-size: 10px;
             font-family: var(--font-mono);
-            font-weight: 700;
-            color: var(--ao-text-muted);
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-tertiary);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 1px solid var(--ao-border-subtle);
+            letter-spacing: 0.08em;
+            border-bottom: 1px solid var(--stroke-green);
             white-space: nowrap;
         }
         .lead-table tbody tr {
-            border-bottom: 1px solid var(--ao-border-subtle);
-            transition: background 0.2s ease;
+            border-bottom: 1px solid var(--stroke-primary);
+            transition: background 0.15s;
         }
-        .lead-table tbody tr:hover { background: var(--ao-surface-2); }
+        .lead-table tbody tr:hover { background: var(--green-50); }
         .lead-table tbody tr:last-child { border-bottom: none; }
-        .lead-table td { padding: 14px 16px; font-size: 13px; vertical-align: middle; }
+        .lead-table td { padding: 14px 16px; font-size: 14px; vertical-align: middle; }
 
         /* ── Rank ── */
         .rank {
             width: 28px; height: 28px;
-            border-radius: 4px;
             display: flex; align-items: center; justify-content: center;
             font-family: var(--font-mono);
-            font-weight: 700; font-size: 12px;
+            font-weight: 500; font-size: 12px;
+            letter-spacing: 0.08em;
+            border-radius: 0;
         }
-        .rank-1 { background: var(--ao-olive-dim); color: var(--ao-olive); border: 1px solid rgba(111, 120, 60, 0.2); }
-        .rank-2 { background: var(--ao-primary-dim); color: var(--ao-primary); border: 1px solid rgba(77, 101, 255, 0.15); }
-        .rank-3 { background: var(--ao-rose-dim); color: var(--ao-rose); border: 1px solid rgba(185, 100, 100, 0.15); }
-        .rank-other { background: var(--ao-surface-2); color: var(--ao-text-muted); border: 1px solid var(--ao-border-subtle); }
+        .rank-1 { background: var(--accent-label); color: var(--near-black); }
+        .rank-2 { background: var(--green-200); color: var(--green-600); }
+        .rank-3 { background: var(--green-100); color: var(--green-600); }
+        .rank-other { background: var(--off-white); color: var(--text-tertiary); border: 1px solid var(--stroke-primary); }
 
-        /* ── Demo Probability ── */
+        /* ── Demo probability bar ── */
         .prob-cell { display: flex; align-items: center; gap: 10px; }
-        .prob-ring {
-            width: 44px; height: 44px;
-            position: relative;
+        .prob-bar-bg {
+            width: 64px; height: 8px;
+            background: var(--green-100);
+            border-radius: 0;
+            overflow: hidden;
         }
-        .prob-ring svg { transform: rotate(-90deg); }
-        .prob-ring circle {
-            fill: none;
-            stroke-width: 3;
-            stroke-linecap: round;
+        .prob-bar {
+            height: 100%;
+            border-radius: 0;
+            transition: width 0.6s ease;
         }
-        .prob-ring .bg { stroke: var(--ao-border-subtle); }
-        .prob-ring .fg { transition: stroke-dashoffset 0.8s ease; }
         .prob-pct {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
             font-family: var(--font-mono);
-            font-weight: 700;
-            font-size: 11px;
+            font-weight: 500;
+            font-size: 13px;
+            letter-spacing: 0.08em;
+            min-width: 36px;
         }
-        .prob-high .fg { stroke: var(--ao-green-bright); }
-        .prob-high .prob-pct { color: var(--ao-green-bright); }
-        .prob-med .fg { stroke: var(--ao-amber); }
-        .prob-med .prob-pct { color: var(--ao-amber); }
-        .prob-low .fg { stroke: var(--ao-rose); }
-        .prob-low .prob-pct { color: var(--ao-text-muted); }
+        .prob-high .prob-bar { background: var(--highlight); }
+        .prob-high .prob-pct { color: var(--green-500); }
+        .prob-med .prob-bar { background: var(--green-500); }
+        .prob-med .prob-pct { color: var(--green-500); }
+        .prob-low .prob-bar { background: var(--green-100); }
+        .prob-low .prob-pct { color: var(--text-tertiary); }
 
         .intent-score {
             font-family: var(--font-mono);
             font-size: 13px;
-            font-weight: 700;
-            color: var(--ao-text-secondary);
+            font-weight: 500;
+            color: var(--text-secondary);
+            letter-spacing: 0.08em;
         }
 
-        /* ── Lead Info ── */
-        .lead-name {
-            font-family: var(--font-serif);
-            font-weight: 700;
-            font-size: 14px;
-            margin-bottom: 2px;
+        /* ── Lead info ── */
+        .lead-name { font-family: var(--font-sans); font-weight: 600; font-size: 14px; margin-bottom: 1px; }
+        .lead-email { font-family: var(--font-mono); color: var(--text-tertiary); font-size: 11px; font-weight: 500; letter-spacing: 0.02em; }
+        .lead-company { color: var(--green-500); font-size: 13px; margin-top: 2px; }
+
+        /* ── Committee badge ── */
+        .committee-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            background: var(--accent-label);
+            border: 1px solid var(--stroke-green);
+            border-radius: 0;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--near-black);
+            margin-top: 3px;
         }
-        .lead-email { color: var(--ao-text-muted); font-size: 12px; font-family: var(--font-mono); }
-        .lead-company { color: var(--ao-primary); font-size: 12px; margin-top: 2px; }
 
         /* ── Signals ── */
         .signals { display: flex; flex-wrap: wrap; gap: 4px; max-width: 340px; }
         .signal-tag {
             font-family: var(--font-mono);
             font-size: 10px;
+            font-weight: 500;
             padding: 3px 8px;
-            border-radius: 3px;
-            font-weight: 400;
+            border-radius: 0;
+            letter-spacing: 0.04em;
             white-space: nowrap;
-            letter-spacing: 0.2px;
         }
-        .signal-hot { background: var(--ao-green-dim); color: var(--ao-green-bright); border: 1px solid rgba(61, 140, 51, 0.15); }
-        .signal-warm { background: var(--ao-olive-dim); color: var(--ao-olive); border: 1px solid rgba(111, 120, 60, 0.12); }
-        .signal-info { background: var(--ao-primary-dim); color: var(--ao-primary); border: 1px solid rgba(77, 101, 255, 0.1); }
-        .signal-neutral { background: var(--ao-surface-2); color: var(--ao-text-muted); border: 1px solid var(--ao-border-subtle); }
+        .signal-hot { background: var(--green-200); color: var(--green-600); border: 1px solid var(--stroke-green); }
+        .signal-warm { background: var(--green-50); color: var(--green-500); border: 1px solid var(--stroke-green); }
+        .signal-info { background: var(--off-white); color: var(--text-secondary); border: 1px solid var(--stroke-primary); }
+        .signal-neutral { background: transparent; color: var(--text-tertiary); border: 1px solid var(--stroke-primary); }
 
-        /* ── Source Badge ── */
+        /* ── Source badge ── */
         .source-badge {
             font-family: var(--font-mono);
             font-size: 10px;
+            font-weight: 500;
             padding: 4px 10px;
-            border-radius: 3px;
-            font-weight: 700;
-            display: inline-block;
-            letter-spacing: 0.5px;
+            border-radius: 0;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
+            display: inline-block;
         }
-        .src-organic { background: var(--ao-green-dim); color: var(--ao-green-bright); }
-        .src-paid { background: var(--ao-amber-dim); color: var(--ao-amber); }
-        .src-direct { background: var(--ao-primary-dim); color: var(--ao-primary); }
-        .src-email { background: var(--ao-purple-dim); color: #C46B94; }
-        .src-referral { background: var(--ao-olive-dim); color: #A3AC6A; }
-        .src-social { background: var(--ao-rose-dim); color: var(--ao-rose); }
-        .src-offline { background: var(--ao-surface-2); color: var(--ao-text-muted); }
-        .src-ai { background: var(--ao-primary-glow); color: #8B9DFF; }
+        .src-organic { background: var(--green-200); color: var(--green-600); }
+        .src-paid { background: var(--accent-label); color: var(--near-black); }
+        .src-direct { background: var(--green-50); color: var(--green-500); border: 1px solid var(--stroke-green); }
+        .src-email { background: var(--off-white); color: var(--text-secondary); border: 1px solid var(--stroke-primary); }
+        .src-referral { background: var(--green-100); color: var(--green-600); }
+        .src-social { background: var(--off-white); color: var(--text-secondary); border: 1px solid var(--stroke-primary); }
+        .src-offline { background: transparent; color: var(--text-tertiary); border: 1px solid var(--stroke-primary); }
+        .src-ai { background: var(--green-200); color: var(--green-600); }
 
         /* ── Metrics ── */
         .metric {
             text-align: center;
             font-family: var(--font-mono);
-            font-variant-numeric: tabular-nums;
-            color: var(--ao-text-secondary);
+            font-weight: 500;
+            font-size: 13px;
+            letter-spacing: 0.04em;
+            color: var(--text-secondary);
         }
-        .metric-highlight { color: var(--ao-green-bright); font-weight: 700; }
+        .metric-highlight { color: var(--green-500); }
 
         /* ── Lifecycle ── */
-        .lc-mql { color: var(--ao-green-bright); font-weight: 700; font-family: var(--font-mono); font-size: 12px; }
-        .lc-lead { color: var(--ao-amber); font-family: var(--font-mono); font-size: 12px; }
-        .lc-nurture { color: var(--ao-primary); font-family: var(--font-mono); font-size: 12px; }
-        .lc-subscriber { color: var(--ao-text-muted); font-family: var(--font-mono); font-size: 12px; }
+        .lc-mql { color: var(--green-500); font-weight: 600; }
+        .lc-lead { color: var(--text-primary); }
+        .lc-nurture { color: var(--text-secondary); }
+        .lc-subscriber { color: var(--text-tertiary); }
+        .lifecycle-cell { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
 
-        /* ── Buying Committee Badge ── */
-        .committee-badge {
-            font-family: var(--font-mono);
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-weight: 700;
-            display: inline-block;
-            margin-top: 3px;
-            background: var(--ao-rose-dim);
-            color: var(--ao-rose);
-            border: 1px solid rgba(185, 100, 100, 0.15);
-        }
-
-        /* ── Expand Row ── */
+        /* ── Expand ── */
         .expand-btn {
             background: none;
-            border: 1px solid var(--ao-border-subtle);
-            color: var(--ao-text-muted);
+            border: 1px solid var(--stroke-primary);
+            color: var(--text-tertiary);
             cursor: pointer;
             font-size: 12px;
             padding: 4px 8px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
+            border-radius: 0;
             font-family: var(--font-mono);
+            transition: all 0.2s;
         }
-        .expand-btn:hover { color: var(--ao-primary); border-color: var(--ao-primary); }
-        .expand-btn.open { transform: rotate(90deg); color: var(--ao-primary); }
+        .expand-btn:hover { color: var(--green-500); border-color: var(--stroke-green); }
+        .expand-btn.open { transform: rotate(90deg); color: var(--green-500); }
         .detail-row { display: none; }
         .detail-row.open { display: table-row; }
         .detail-row td {
-            padding: 20px 16px 20px 60px;
-            background: var(--ao-surface-2);
-            border-bottom: 1px solid var(--ao-border-subtle);
+            padding: var(--space-6) var(--space-4) var(--space-6) 60px;
+            background: var(--green-50);
+            border-bottom: 1px solid var(--stroke-green);
         }
-        .detail-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-        }
+        .detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
         .detail-label {
             font-family: var(--font-mono);
             font-size: 10px;
-            color: var(--ao-text-muted);
+            font-weight: 500;
+            color: var(--text-tertiary);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-1);
         }
-        .detail-value { font-size: 13px; color: var(--ao-text-secondary); }
-        .detail-value a { color: var(--ao-primary); text-decoration: none; transition: opacity 0.2s; }
-        .detail-value a:hover { opacity: 0.8; text-decoration: underline; }
+        .detail-value { font-size: 13px; color: var(--text-secondary); }
+        .detail-value a { color: var(--green-500); text-decoration: none; }
+        .detail-value a:hover { text-decoration: underline; }
 
-        /* ── What to Do Next (AirOps brand voice) ── */
-        .action-section {
-            padding: 0 40px;
-            margin-bottom: 24px;
-        }
+        /* ── Action section ── */
+        .action-section { padding: 0 var(--space-12); margin-bottom: var(--space-8); }
         .action-label {
             font-family: var(--font-mono);
             font-size: 11px;
-            font-weight: 700;
-            color: var(--ao-primary);
+            font-weight: 500;
+            color: var(--green-500);
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 10px;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-3);
         }
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
+        .action-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
         .action-card {
-            background: var(--ao-surface);
-            border: 1px solid var(--ao-border-subtle);
-            border-radius: 8px;
-            padding: 16px 20px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            background: var(--white);
+            border: 1px solid var(--stroke-green);
+            border-radius: 0;
+            padding: var(--space-6);
         }
-        .action-card:hover { border-color: var(--ao-border-hover); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); }
-        .action-card h4 {
-            font-family: var(--font-serif);
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 6px;
+        .action-card h4 { font-family: var(--font-sans); font-size: 14px; font-weight: 600; margin-bottom: var(--space-1); }
+        .action-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+        .action-card .action-lead {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--green-500);
+            display: block;
+            margin-bottom: var(--space-2);
         }
-        .action-card p { font-size: 12px; color: var(--ao-text-muted); line-height: 1.6; }
-        .action-card .action-lead { color: var(--ao-primary); font-family: var(--font-mono); font-size: 11px; font-weight: 700; }
 
         /* ── Footer ── */
         .footer {
-            padding: 20px 40px;
-            border-top: 1px solid var(--ao-border-subtle);
+            padding: var(--space-6) var(--space-12);
+            border-top: 1px solid var(--stroke-primary);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .footer-left {
-            font-size: 12px;
-            color: var(--ao-text-muted);
-            font-family: var(--font-mono);
-        }
-        .footer-right {
-            display: flex; gap: 16px;
-        }
+        .footer-left { font-size: 13px; color: var(--text-tertiary); }
         .footer-link {
             font-family: var(--font-mono);
             font-size: 11px;
-            color: var(--ao-text-muted);
+            color: var(--text-tertiary);
             text-decoration: none;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
             transition: color 0.2s;
         }
-        .footer-link:hover { color: var(--ao-primary); }
+        .footer-link:hover { color: var(--green-500); }
 
         /* ── Responsive ── */
         @media (max-width: 1200px) {
@@ -527,37 +533,36 @@
         }
         @media (max-width: 768px) {
             .stats-row { grid-template-columns: 1fr; }
-            .header { flex-direction: column; gap: 12px; align-items: flex-start; padding: 16px 20px; }
-            .controls { flex-direction: column; padding: 0 20px 16px; }
+            .header { flex-direction: column; gap: 12px; align-items: flex-start; padding: 16px 24px; }
+            .controls { flex-direction: column; padding: 0 24px 16px; }
             .search-box { width: 100%; }
-            .table-container, .tldr, .action-section, .methodology { padding-left: 20px; padding-right: 20px; }
+            .table-container, .tldr, .action-section, .methodology { padding-left: 24px; padding-right: 24px; }
             .detail-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <div class="header">
         <div class="header-left">
-            <div class="logo-mark">
-                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="32" height="32" rx="6" fill="#4d65ff"/>
-                    <path d="M8 22L16 10L24 22H8Z" fill="white" opacity="0.9"/>
-                    <circle cx="16" cy="18" r="2.5" fill="#4d65ff"/>
-                </svg>
-                <div>
-                    <div class="header-title">Pipeline by Intent Analyzer<span>AirOps x HubSpot</span></div>
-                </div>
-            </div>
+            <svg class="logo-svg" viewBox="0 0 784 252" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M111.828 65.6415V88.4663C101.564 72.0112 85.627 61.9258 65.9084 61.9258C23.7703 61.9258 0 92.9782 0 134.647C0 176.581 24.0404 208.695 66.4487 208.695C86.1672 208.695 101.834 198.609 111.828 182.154V204.979H144.782V65.6415H111.828ZM72.9315 181.093C48.8911 181.093 35.1152 159.064 35.1152 134.647C35.1152 110.76 48.621 89.7933 73.4717 89.7933C94.0006 89.7933 111.558 104.391 111.558 134.116C111.558 163.31 94.8109 181.093 72.9315 181.093Z" fill="#001408"/>
+                <path d="M173.137 65.6494V204.987H208.252V65.6494H173.137Z" fill="#001408"/>
+                <path d="M272.998 100.141V65.6386H237.883V204.976H272.998V125.355C272.998 104.919 287.314 96.691 300.82 96.691C308.653 96.691 316.757 98.8143 321.079 100.407V63.25C298.119 63.25 279.211 76.7856 272.998 100.141Z" fill="#001408"/>
+                <path d="M329.629 108.115C329.629 151.377 359.882 182.163 403.371 182.163C447.13 182.163 477.115 151.377 477.115 108.115C477.115 65.6507 447.13 35.3945 403.371 35.3945C359.882 35.3945 329.629 65.6507 329.629 108.115ZM441.997 108.115C441.997 135.187 427.141 154.561 403.371 154.561C379.33 154.561 364.744 135.187 364.744 108.115C364.744 82.1058 379.33 63.2621 403.371 63.2621C427.141 63.2621 441.997 82.1058 441.997 108.115Z" fill="#001408"/>
+                <path d="M575.086 61.9258C554.557 61.9258 537.81 73.869 528.896 92.9782V65.6415H493.781V251.425H528.896V180.031C538.891 197.282 557.529 208.695 577.247 208.695C615.604 208.695 642.345 179.235 642.345 137.035C642.345 92.7128 614.523 61.9258 575.086 61.9258ZM568.874 182.685C545.374 182.685 528.896 163.31 528.896 135.708C528.896 107.31 545.374 87.4047 568.874 87.4047C591.293 87.4047 607.23 107.841 607.23 136.77C607.23 163.841 591.293 182.685 568.874 182.685Z" fill="#001408"/>
+                <path d="M653.555 156.675C653.555 181.889 676.244 208.695 721.624 208.695C767.274 208.695 783.751 182.42 783.751 161.983C783.751 130.666 746.205 125.092 721.084 120.315C704.066 117.395 693.262 115.007 693.262 105.452C693.262 94.5706 705.417 87.6701 718.383 87.6701C735.94 87.6701 742.693 99.6133 743.233 112.353H778.349C778.349 91.6511 763.492 61.9258 717.572 61.9258C677.865 61.9258 658.147 83.9544 658.147 107.575C658.147 141.282 696.233 144.732 721.354 149.509C735.94 152.163 748.636 155.348 748.636 165.699C748.636 176.05 736.21 182.95 722.975 182.95C710.549 182.95 688.67 176.05 688.67 156.675H653.555Z" fill="#001408"/>
+                <path d="M191.339 48.6576C176.921 48.6576 166.578 38.4949 166.578 24.6368C166.578 10.7786 176.921 0 191.339 0C205.13 0 216.1 10.7786 216.1 24.6368C216.1 38.4949 205.13 48.6576 191.339 48.6576Z" fill="#001408"/>
+            </svg>
+            <div class="header-divider"></div>
+            <div class="header-title">Pipeline by intent analyzer</div>
         </div>
         <div class="header-right">
-            <span class="badge badge-live">LIVE</span>
-            <span class="badge badge-hubspot">HubSpot MCP</span>
+            <span class="pill-green pill">LIVE</span>
+            <span class="pill pill-outline">HUBSPOT MCP</span>
             <span class="timestamp" id="timestamp"></span>
         </div>
     </div>
 
-    <!-- TL;DR Section -->
     <div class="tldr">
         <div class="tldr-card">
             <div class="tldr-label">TL;DR</div>
@@ -565,10 +570,8 @@
         </div>
     </div>
 
-    <!-- Stats -->
     <div class="stats-row" id="stats-row"></div>
 
-    <!-- Scoring Methodology -->
     <div class="methodology">
         <button class="methodology-toggle" id="method-toggle">
             <span class="arrow">&#9654;</span> How the demo probability score works
@@ -580,15 +583,14 @@
                 <div class="method-item"><span class="label">Visited /pricing page</span><span class="pts">+15</span></div>
                 <div class="method-item"><span class="label">MQL lifecycle stage</span><span class="pts">+12</span></div>
                 <div class="method-item"><span class="label">Active this week (email + visit)</span><span class="pts">+15</span></div>
-                <div class="method-item"><span class="label">High-intent form (demo/growth expert)</span><span class="pts">+15</span></div>
-                <div class="method-item"><span class="label">Email engagement ratio (click/open)</span><span class="pts">+8</span></div>
+                <div class="method-item"><span class="label">High-intent form (demo request)</span><span class="pts">+15</span></div>
+                <div class="method-item"><span class="label">Email engagement ratio</span><span class="pts">+8</span></div>
                 <div class="method-item"><span class="label">Deep session count (50+)</span><span class="pts">+8</span></div>
                 <div class="method-item"><span class="label">Referral source quality</span><span class="pts">+7</span></div>
             </div>
         </div>
     </div>
 
-    <!-- Controls -->
     <div class="controls">
         <input type="text" class="search-box" id="search" placeholder="Search leads, companies, emails...">
         <button class="filter-btn active" data-filter="all">All</button>
@@ -597,23 +599,22 @@
         <button class="filter-btn" data-filter="nurture">Nurture</button>
         <button class="filter-btn" data-filter="pricing">Pricing</button>
         <button class="filter-btn" data-filter="committee">Committee</button>
-        <button class="filter-btn" data-filter="email-active">Email Active</button>
+        <button class="filter-btn" data-filter="email-active">Email active</button>
         <select class="sort-select" id="sort-select">
-            <option value="prob-desc">Demo Probability: High</option>
-            <option value="score-desc">Intent Score: High</option>
-            <option value="pageviews-desc">Page Views: Most</option>
-            <option value="sessions-desc">Sessions: Most</option>
-            <option value="clicks-desc">Email Clicks: Most</option>
+            <option value="prob-desc">DEMO PROB: HIGH</option>
+            <option value="score-desc">INTENT: HIGH</option>
+            <option value="pageviews-desc">VIEWS: MOST</option>
+            <option value="sessions-desc">SESSIONS: MOST</option>
+            <option value="clicks-desc">CLICKS: MOST</option>
         </select>
     </div>
 
-    <!-- Table -->
     <div class="table-container">
         <table class="lead-table">
             <thead>
                 <tr>
                     <th style="width:36px">#</th>
-                    <th>Demo Prob.</th>
+                    <th>Demo prob.</th>
                     <th>Intent</th>
                     <th>Lead</th>
                     <th>Source</th>
@@ -629,235 +630,139 @@
         </table>
     </div>
 
-    <!-- What to Do Next -->
     <div class="action-section">
         <div class="action-label">What to do next</div>
         <div class="action-grid" id="action-grid"></div>
     </div>
 
-    <!-- Footer -->
     <div class="footer">
-        <div class="footer-left">Pipeline by Intent Analyzer &middot; Powered by AirOps Brand Kit + HubSpot MCP</div>
-        <div class="footer-right">
-            <a href="https://www.airops.com" class="footer-link" target="_blank">airops.com</a>
-        </div>
+        <div class="footer-left">Pipeline by intent analyzer -- Powered by AirOps Brand Kit + HubSpot MCP</div>
+        <a href="https://www.airops.com" class="footer-link" target="_blank">airops.com</a>
     </div>
 
 <script>
+// Leads with NO open opportunities and NO demo scheduled
+// Removed: Rachit Bhatia/quso.ai (Closed Won -- existing customer), Anna Jelezovskaia/Gladia (Closed Lost deal)
 const LEADS_DATA = [
   {"id":"162780474411","name":"Shirley Sweeney","email":"shirley@surveycto.com","company":"SurveyCTO","score":155,"demo_prob":73,"signals":["329 page views","66 sessions","4 email clicks","13 emails opened","email click this week","visited this week","visited /pricing","5 form submissions","MQL","src: Direct Traffic"],"page_views":329,"sessions":66,"email_clicks":4,"email_opens":13,"lifecycle":"marketingqualifiedlead","source":"DIRECT_TRAFFIC","last_url":"https://www.airops.com/kyle-poyar-x-airops-webinar-gtm-ai-search","last_visit":"2026-02-27T18:12:00","last_email_click":"2026-02-27T18:12:52","recent_form":"Search Playbook for Marketers","committee":1},
-  {"id":"105213498318","name":"Rachit Bhatia","email":"rachit@vidyo.ai","company":"quso.ai","score":128,"demo_prob":72,"signals":["2443 page views","267 sessions","1 email clicks","6 emails opened","visited this week","visited /pricing","6 form submissions","MQL","src: Organic Search"],"page_views":2443,"sessions":267,"email_clicks":1,"email_opens":6,"lifecycle":"marketingqualifiedlead","source":"ORGANIC_SEARCH","last_url":"https://www.airops.com/","last_visit":"2026-02-26T18:51:00","last_email_click":"2026-01-30T17:28:22","recent_form":"Manage audience | AirOps Learning Hub","committee":2},
   {"id":"157564037576","name":"Aoife Ni Mheachair","email":"aoife.nimheachair@audienceview.com","company":"AudienceView","score":120,"demo_prob":69,"signals":["17 page views","8 sessions","4 email clicks","5 emails opened","email click this week","visited this week","3 form submissions","MQL","src: Direct Traffic"],"page_views":17,"sessions":8,"email_clicks":4,"email_opens":5,"lifecycle":"marketingqualifiedlead","source":"DIRECT_TRAFFIC","last_url":"https://www.airops.com/exitfive-airops-content-quality-package","last_visit":"2026-02-28T05:00:00","last_email_click":"2026-02-27T15:27:14","recent_form":"Become a Certified AI Marketer","committee":4},
   {"id":"105226668236","name":"Daragh Nener-Lally","email":"daragh@autods.com","company":"AutoDS","score":120,"demo_prob":67,"signals":["642 page views","103 sessions","4 email clicks","6 emails opened","email click this week","visited this week","1 form submission","MQL","src: Referrals"],"page_views":642,"sessions":103,"email_clicks":4,"email_opens":6,"lifecycle":"marketingqualifiedlead","source":"REFERRALS","last_url":"https://app.airops.com/onboarding/join","last_visit":"2026-03-01T14:55:00","last_email_click":"2026-03-01T13:29:49","recent_form":"Winning Brand Campaign Quiz 1","committee":2},
   {"id":"105254430553","name":"Irene Cecotti","email":"irene.cecotti@factorial.co","company":"Factorial","score":115,"demo_prob":64,"signals":["27 page views","21 sessions","6 email clicks","8 emails opened","email click this week","visited this week","MQL","src: Direct Traffic"],"page_views":27,"sessions":21,"email_clicks":6,"email_opens":8,"lifecycle":"marketingqualifiedlead","source":"DIRECT_TRAFFIC","last_url":"https://www.airops.com/report/ai-search-playbook-marketers","last_visit":"2026-02-27T07:36:00","last_email_click":"2026-02-25T08:07:50","recent_form":"","committee":5},
   {"id":"157655299052","name":"Noa Segol","email":"noa@practitest.com","company":"PractiTest","score":135,"demo_prob":60,"signals":["115 page views","38 sessions","4 email clicks","12 emails opened","email click this week","visited this week","visited /pricing","MQL","src: Direct Traffic"],"page_views":115,"sessions":38,"email_clicks":4,"email_opens":12,"lifecycle":"marketingqualifiedlead","source":"DIRECT_TRAFFIC","last_url":"https://www.airops.com/kyle-poyar-x-airops-webinar-gtm-ai-search","last_visit":"2026-03-01T07:16:00","last_email_click":"2026-03-01T07:16:46","recent_form":"","committee":0},
   {"id":"105233818701","name":"Matteo Tittarelli","email":"matteo.tittarelli@gmail.com","company":"","score":130,"demo_prob":60,"signals":["670 page views","98 sessions","4 email clicks","10 emails opened","visited this week","visited /pricing","8 form submissions","Lead","src: Direct Traffic"],"page_views":670,"sessions":98,"email_clicks":4,"email_opens":10,"lifecycle":"lead","source":"DIRECT_TRAFFIC","last_url":"https://app.airops.com/genesys-growth-0/data/brand_kits/332/product_lines/25177","last_visit":"2026-02-26T18:49:00","last_email_click":"2026-02-21T07:28:20","recent_form":"Search Playbook for Marketers","committee":0},
   {"id":"105233893775","name":"Diane Leyman","email":"diane.leyman@lyssna.com","company":"Lyssna","score":120,"demo_prob":58,"signals":["434 page views","23 sessions","4 email clicks","14 emails opened","email click this week","3 form submissions","MQL","src: Offline"],"page_views":434,"sessions":23,"email_clicks":4,"email_opens":14,"lifecycle":"marketingqualifiedlead","source":"OFFLINE","last_url":"https://app.airops.com/cohort-5-0/browse","last_visit":"2026-02-19T23:46:00","last_email_click":"2026-03-01T21:54:07","recent_form":"Winning Brand Campaign Quiz 1","committee":3},
-  {"id":"105234086553","name":"Anna Jelezovskaia","email":"ajelezovskaia@gladia.io","company":"Gladia","score":118,"demo_prob":56,"signals":["54 page views","15 sessions","4 email clicks","16 emails opened","email click this week","visited this week","1 form submission","Nurture","src: Email Marketing"],"page_views":54,"sessions":15,"email_clicks":4,"email_opens":16,"lifecycle":"1232155415","source":"EMAIL_MARKETING","last_url":"https://www.airops.com/win","last_visit":"2026-02-23T13:42:00","last_email_click":"2026-02-25T15:35:59","recent_form":"AirOps - Talk to a Growth Expert","committee":3},
-  {"id":"105251252131","name":"Mano Ya","email":"manoharah98@gmail.com","company":"Gartner","score":125,"demo_prob":52,"signals":["142 page views","97 sessions","4 email clicks","10 emails opened","email click this week","visited this week","11 form submissions","Lead","src: Offline"],"page_views":142,"sessions":97,"email_clicks":4,"email_opens":10,"lifecycle":"lead","source":"OFFLINE","last_url":"https://www.airops.com/blog/webinar-recap-the-bofu-content-lashay-lewis","last_visit":"2026-02-28T02:11:00","last_email_click":"2026-02-28T02:27:00","recent_form":"Search Playbook for Marketers","committee":1}
+  {"id":"105254629577","name":"Nupur Mittal","email":"nupur.mittal@baselane.com","company":"Baselane","score":128,"demo_prob":55,"signals":["83 page views","29 sessions","4 email clicks","15 emails opened","email click this week","visited this week","2 form submissions","Nurture","src: Paid Search"],"page_views":83,"sessions":29,"email_clicks":4,"email_opens":15,"lifecycle":"1232155415","source":"PAID_SEARCH","last_url":"https://www.airops.com/blog/content-refresh-templates-and-frameworks","last_visit":"2026-02-25T20:01:00","last_email_click":"2026-02-27T18:31:07","recent_form":"Become an AI marketing expert in 2-week","committee":2},
+  {"id":"105251252131","name":"Mano Ya","email":"manoharah98@gmail.com","company":"Gartner","score":125,"demo_prob":52,"signals":["142 page views","97 sessions","4 email clicks","10 emails opened","email click this week","visited this week","11 form submissions","Lead","src: Offline"],"page_views":142,"sessions":97,"email_clicks":4,"email_opens":10,"lifecycle":"lead","source":"OFFLINE","last_url":"https://www.airops.com/blog/webinar-recap-the-bofu-content-lashay-lewis","last_visit":"2026-02-28T02:11:00","last_email_click":"2026-02-28T02:27:00","recent_form":"Search Playbook for Marketers","committee":1},
+  {"id":"105254504741","name":"Kerry Ben-Joseph","email":"kerry.benjoseph@alchemer.com","company":"Alchemer","score":115,"demo_prob":50,"signals":["37 page views","12 sessions","6 email clicks","6 emails opened","email click this week","visited this week","MQL","src: Paid Search"],"page_views":37,"sessions":12,"email_clicks":6,"email_opens":6,"lifecycle":"marketingqualifiedlead","source":"PAID_SEARCH","last_url":"https://www.airops.com/blog/10x-content-engineer-one-year","last_visit":"2026-02-27T17:54:00","last_email_click":"2026-02-27T17:55:33","recent_form":"","committee":0}
 ];
 
-const SOURCE_LABELS = {
-    'ORGANIC_SEARCH':'Organic','PAID_SEARCH':'Paid','DIRECT_TRAFFIC':'Direct',
-    'EMAIL_MARKETING':'Email','REFERRALS':'Referral','SOCIAL_MEDIA':'Social',
-    'PAID_SOCIAL':'Paid Social','AI_REFERRALS':'AI Ref','OFFLINE':'Offline','OTHER_CAMPAIGNS':'Campaign'
-};
-const SOURCE_CLASSES = {
-    'ORGANIC_SEARCH':'src-organic','PAID_SEARCH':'src-paid','DIRECT_TRAFFIC':'src-direct',
-    'EMAIL_MARKETING':'src-email','REFERRALS':'src-referral','SOCIAL_MEDIA':'src-social',
-    'PAID_SOCIAL':'src-social','AI_REFERRALS':'src-ai','OFFLINE':'src-offline','OTHER_CAMPAIGNS':'src-offline'
-};
+const SRC_LABELS = {'ORGANIC_SEARCH':'Organic','PAID_SEARCH':'Paid search','DIRECT_TRAFFIC':'Direct','EMAIL_MARKETING':'Email','REFERRALS':'Referral','SOCIAL_MEDIA':'Social','PAID_SOCIAL':'Paid social','AI_REFERRALS':'AI ref','OFFLINE':'Offline','OTHER_CAMPAIGNS':'Campaign'};
+const SRC_CLASSES = {'ORGANIC_SEARCH':'src-organic','PAID_SEARCH':'src-paid','DIRECT_TRAFFIC':'src-direct','EMAIL_MARKETING':'src-email','REFERRALS':'src-referral','SOCIAL_MEDIA':'src-social','PAID_SOCIAL':'src-social','AI_REFERRALS':'src-ai','OFFLINE':'src-offline','OTHER_CAMPAIGNS':'src-offline'};
 const LC_LABELS = {'marketingqualifiedlead':'MQL','lead':'Lead','1232155415':'Nurture','subscriber':'Subscriber'};
 const LC_CLASSES = {'marketingqualifiedlead':'lc-mql','lead':'lc-lead','1232155415':'lc-nurture','subscriber':'lc-subscriber'};
 
-let currentFilter = 'all', currentSort = 'prob-desc', searchQuery = '';
+let currentFilter='all', currentSort='prob-desc', searchQuery='';
 
-function classifySignal(sig) {
-    const s = sig.toLowerCase();
-    if (s.includes('pricing') || s.includes('demo') || s.includes('compare') || s.includes('this week') || s.includes('form submission') || s.includes('mql')) return 'signal-hot';
-    if (s.includes('email click') || s.includes('sessions') || s.includes('page view')) return 'signal-warm';
-    if (s.includes('src:')) return 'signal-neutral';
+function classifySignal(s) {
+    const l = s.toLowerCase();
+    if (l.includes('pricing')||l.includes('demo')||l.includes('this week')||l.includes('form submission')||l.includes('mql')) return 'signal-hot';
+    if (l.includes('email click')||l.includes('sessions')||l.includes('page view')) return 'signal-warm';
+    if (l.includes('src:')) return 'signal-neutral';
     return 'signal-info';
 }
-
 function formatDate(d) {
     if (!d) return 'N/A';
-    const date = new Date(d), now = new Date(), diff = (now - date) / 36e5;
-    if (diff < 1) return 'Just now';
-    if (diff < 24) return `${Math.floor(diff)}h ago`;
-    if (diff < 168) return `${Math.floor(diff / 24)}d ago`;
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const dt=new Date(d), now=new Date(), h=(now-dt)/36e5;
+    if(h<1) return 'Just now'; if(h<24) return `${Math.floor(h)}h ago`; if(h<168) return `${Math.floor(h/24)}d ago`;
+    return dt.toLocaleDateString('en-US',{month:'short',day:'numeric'});
 }
-
-function probRing(pct, cls) {
-    const r = 18, c = 2 * Math.PI * r;
-    const offset = c - (pct / 100) * c;
-    return `<div class="prob-ring ${cls}">
-        <svg width="44" height="44" viewBox="0 0 44 44">
-            <circle class="bg" cx="22" cy="22" r="${r}"/>
-            <circle class="fg" cx="22" cy="22" r="${r}" stroke-dasharray="${c}" stroke-dashoffset="${offset}"/>
-        </svg>
-        <span class="prob-pct">${pct}%</span>
-    </div>`;
-}
-
 function renderTldr(leads) {
-    const top = leads[0];
-    const committees = leads.filter(l => l.committee >= 3);
-    const mqls = leads.filter(l => l.lifecycle === 'marketingqualifiedlead');
-    document.getElementById('tldr-content').innerHTML = `
-        <strong>${leads.length} leads scored</strong> by demo completion probability this week.
-        Top prospect: <strong>${top.name}</strong> at ${top.company || 'N/A'} (${top.demo_prob}% probability).
-        ${committees.length > 0 ? `<strong>${committees.length} accounts</strong> show buying committee signals (${committees.map(c => c.company).join(', ')}).` : ''}
-        ${mqls.length} are MQLs. <strong>Decision rule:</strong> prioritize accounts with 60%+ probability and multi-stakeholder engagement for same-week outreach.
-    `;
+    const top=leads[0], coms=leads.filter(l=>l.committee>=3), mqls=leads.filter(l=>l.lifecycle==='marketingqualifiedlead');
+    document.getElementById('tldr-content').innerHTML=`
+        <strong>${leads.length} leads scored</strong> by demo completion probability this week. No open opportunities. No demos scheduled.
+        Top prospect: <strong>${top.name}</strong> at ${top.company||'N/A'} (${top.demo_prob}%).
+        ${coms.length?`<strong>${coms.length} accounts</strong> show buying committee signals (${coms.map(c=>c.company).join(', ')}).`:''}
+        ${mqls.length} are MQLs. <strong>Decision rule:</strong> prioritize accounts with 60%+ probability and multi-stakeholder engagement for same-week outreach.`;
 }
-
 function renderStats(leads) {
-    const maxProb = Math.max(...leads.map(l => l.demo_prob));
-    const avgProb = Math.round(leads.reduce((s, l) => s + l.demo_prob, 0) / leads.length);
-    const mqls = leads.filter(l => l.lifecycle === 'marketingqualifiedlead').length;
-    const committees = leads.filter(l => l.committee >= 2).length;
-    document.getElementById('stats-row').innerHTML = `
-        <div class="stat-card">
-            <div class="stat-label">Top Demo Probability</div>
-            <div class="stat-value green">${maxProb}%</div>
-            <div class="stat-sub">${leads[0]?.name || '-'}</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Avg Demo Probability</div>
-            <div class="stat-value amber">${avgProb}%</div>
-            <div class="stat-sub">across ${leads.length} leads</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">MQLs in Pool</div>
-            <div class="stat-value primary">${mqls}</div>
-            <div class="stat-sub">${Math.round(mqls/leads.length*100)}% of total</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Buying Committees</div>
-            <div class="stat-value olive">${committees}</div>
-            <div class="stat-sub">accounts with 2+ contacts</div>
-        </div>
-    `;
+    const mx=Math.max(...leads.map(l=>l.demo_prob)), av=Math.round(leads.reduce((s,l)=>s+l.demo_prob,0)/leads.length);
+    const mqls=leads.filter(l=>l.lifecycle==='marketingqualifiedlead').length, coms=leads.filter(l=>l.committee>=2).length;
+    document.getElementById('stats-row').innerHTML=`
+        <div class="stat-card"><div class="stat-label">Top demo probability</div><div class="stat-value green">${mx}%</div><div class="stat-sub">${leads[0]?.name||'-'}</div></div>
+        <div class="stat-card"><div class="stat-label">Avg demo probability</div><div class="stat-value">${av}%</div><div class="stat-sub">across ${leads.length} leads</div></div>
+        <div class="stat-card"><div class="stat-label">MQLs in pool</div><div class="stat-value green">${mqls}</div><div class="stat-sub">${Math.round(mqls/leads.length*100)}% of total</div></div>
+        <div class="stat-card"><div class="stat-label">Buying committees</div><div class="stat-value">${coms}</div><div class="stat-sub">accounts with 2+ contacts</div></div>`;
 }
-
 function renderActions(leads) {
-    const top3 = leads.slice(0, 3);
-    const grid = document.getElementById('action-grid');
-    const actions = [
-        { lead: top3[0], action: 'Book a personalized demo', reason: `Highest probability at ${top3[0]?.demo_prob}%. ${top3[0]?.signals.includes('visited /pricing') ? 'Already evaluated pricing.' : 'Deep engagement across multiple signals.'}` },
-        { lead: top3[1], action: 'Send multi-threaded outreach', reason: `${top3[1]?.committee >= 2 ? top3[1].committee + ' stakeholders engaged at ' + top3[1].company + '.' : 'Strong intent signals.'} Reference their ${top3[1]?.recent_form || 'recent engagement'}.` },
-        { lead: top3[2], action: 'Coordinate account-based play', reason: `${top3[2]?.committee >= 3 ? 'Buying committee forming: ' + top3[2].committee + ' contacts at ' + top3[2].company + '.' : 'Multiple strong signals converging.'} Move to sales-ready.` },
+    const t=leads.slice(0,3), g=document.getElementById('action-grid');
+    const acts=[
+        {l:t[0],a:'Book a personalized demo',r:`Highest probability at ${t[0]?.demo_prob}%. ${t[0]?.signals.includes('visited /pricing')?'Already evaluated pricing.':'Strong multi-signal engagement.'}`},
+        {l:t[1],a:'Send multi-threaded outreach',r:`${t[1]?.committee>=2?t[1].committee+' stakeholders at '+t[1].company+'.':'High intent signals.'} Reference their ${t[1]?.recent_form||'recent activity'}.`},
+        {l:t[2],a:'Coordinate account-based play',r:`${t[2]?.committee>=3?'Buying committee: '+t[2].committee+' contacts at '+t[2].company+'.':'Multiple signals converging.'} Move to sales-ready.`}
     ];
-    grid.innerHTML = actions.map(a => `
-        <div class="action-card">
-            <span class="action-lead">${a.lead?.name || '-'} &middot; ${a.lead?.company || 'N/A'}</span>
-            <h4>${a.action}</h4>
-            <p>${a.reason}</p>
-        </div>
-    `).join('');
+    g.innerHTML=acts.map(a=>`<div class="action-card"><span class="action-lead">${a.l?.name||'-'} -- ${a.l?.company||'N/A'}</span><h4>${a.a}</h4><p>${a.r}</p></div>`).join('');
 }
-
 function renderLeads(leads) {
-    const tbody = document.getElementById('leads-tbody');
-    tbody.innerHTML = '';
-    leads.forEach((lead, idx) => {
-        const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : 'rank-other';
-        const probClass = lead.demo_prob >= 65 ? 'prob-high' : lead.demo_prob >= 55 ? 'prob-med' : 'prob-low';
-        const srcClass = SOURCE_CLASSES[lead.source] || 'src-offline';
-        const srcLabel = SOURCE_LABELS[lead.source] || lead.source || '?';
-        const lcClass = LC_CLASSES[lead.lifecycle] || 'lc-subscriber';
-        const lcLabel = LC_LABELS[lead.lifecycle] || '-';
-        const displaySignals = lead.signals.filter(s => !s.startsWith('src:') && !['MQL','Lead','Nurture','Subscriber'].includes(s));
-
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td><div class="rank ${rankClass}">${idx + 1}</div></td>
-            <td><div class="prob-cell">${probRing(lead.demo_prob, probClass)}</div></td>
-            <td><span class="intent-score">${lead.score}</span></td>
-            <td>
-                <div class="lead-name">${lead.name}</div>
-                <div class="lead-email">${lead.email}</div>
-                ${lead.company ? `<div class="lead-company">${lead.company}</div>` : ''}
-                ${lead.committee >= 2 ? `<span class="committee-badge">${lead.committee} contacts</span>` : ''}
-            </td>
-            <td><span class="source-badge ${srcClass}">${srcLabel}</span></td>
-            <td><span class="${lcClass}">${lcLabel}</span></td>
-            <td class="metric ${lead.page_views >= 100 ? 'metric-highlight' : ''}">${lead.page_views.toLocaleString()}</td>
-            <td class="metric ${lead.sessions >= 20 ? 'metric-highlight' : ''}">${lead.sessions}</td>
-            <td class="metric ${lead.email_clicks >= 3 ? 'metric-highlight' : ''}">${lead.email_clicks}</td>
-            <td><div class="signals">${displaySignals.slice(0, 4).map(s => `<span class="signal-tag ${classifySignal(s)}">${s}</span>`).join('')}${displaySignals.length > 4 ? `<span class="signal-tag signal-neutral">+${displaySignals.length - 4}</span>` : ''}</div></td>
-            <td><button class="expand-btn" data-id="${lead.id}">&#9654;</button></td>
-        `;
+    const tbody=document.getElementById('leads-tbody'); tbody.innerHTML='';
+    leads.forEach((l,i)=>{
+        const rc=i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-other';
+        const pc=l.demo_prob>=65?'prob-high':l.demo_prob>=55?'prob-med':'prob-low';
+        const sc=SRC_CLASSES[l.source]||'src-offline', sl=SRC_LABELS[l.source]||l.source||'?';
+        const lcc=LC_CLASSES[l.lifecycle]||'lc-subscriber', lcl=LC_LABELS[l.lifecycle]||'-';
+        const ds=l.signals.filter(s=>!s.startsWith('src:')&&!['MQL','Lead','Nurture','Subscriber'].includes(s));
+        const pct=Math.round(l.demo_prob/73*100);
+        const row=document.createElement('tr');
+        row.innerHTML=`
+            <td><div class="rank ${rc}">${i+1}</div></td>
+            <td><div class="prob-cell ${pc}"><span class="prob-pct">${l.demo_prob}%</span><div class="prob-bar-bg"><div class="prob-bar" style="width:${pct}%"></div></div></div></td>
+            <td><span class="intent-score">${l.score}</span></td>
+            <td><div class="lead-name">${l.name}</div><div class="lead-email">${l.email}</div>${l.company?`<div class="lead-company">${l.company}</div>`:''}${l.committee>=2?`<span class="committee-badge">${l.committee} contacts</span>`:''}</td>
+            <td><span class="source-badge ${sc}">${sl}</span></td>
+            <td><span class="lifecycle-cell ${lcc}">${lcl}</span></td>
+            <td class="metric ${l.page_views>=100?'metric-highlight':''}">${l.page_views.toLocaleString()}</td>
+            <td class="metric ${l.sessions>=20?'metric-highlight':''}">${l.sessions}</td>
+            <td class="metric ${l.email_clicks>=3?'metric-highlight':''}">${l.email_clicks}</td>
+            <td><div class="signals">${ds.slice(0,4).map(s=>`<span class="signal-tag ${classifySignal(s)}">${s}</span>`).join('')}${ds.length>4?`<span class="signal-tag signal-neutral">+${ds.length-4}</span>`:''}</div></td>
+            <td><button class="expand-btn" data-id="${l.id}">&#9654;</button></td>`;
         tbody.appendChild(row);
-
-        const detailRow = document.createElement('tr');
-        detailRow.className = 'detail-row';
-        detailRow.id = `detail-${lead.id}`;
-        let pathname = 'N/A';
-        try { pathname = new URL(lead.last_url).pathname.slice(0, 60); } catch(e) {}
-        detailRow.innerHTML = `<td colspan="11"><div class="detail-grid">
-            <div><div class="detail-label">Last Page Visited</div><div class="detail-value"><a href="${lead.last_url}" target="_blank">${pathname}</a></div></div>
-            <div><div class="detail-label">Last Visit</div><div class="detail-value">${formatDate(lead.last_visit)}</div></div>
-            <div><div class="detail-label">Last Email Click</div><div class="detail-value">${formatDate(lead.last_email_click)}</div></div>
-            <div><div class="detail-label">Emails Opened</div><div class="detail-value">${lead.email_opens}</div></div>
-            <div><div class="detail-label">Recent Form</div><div class="detail-value">${lead.recent_form || 'N/A'}</div></div>
-            <div><div class="detail-label">All Signals</div><div class="detail-value">${lead.signals.join(', ')}</div></div>
-        </div></td>`;
-        tbody.appendChild(detailRow);
+        const dr=document.createElement('tr'); dr.className='detail-row'; dr.id=`detail-${l.id}`;
+        let pn='N/A'; try{pn=new URL(l.last_url).pathname.slice(0,60)}catch(e){}
+        dr.innerHTML=`<td colspan="11"><div class="detail-grid">
+            <div><div class="detail-label">Last page visited</div><div class="detail-value"><a href="${l.last_url}" target="_blank">${pn}</a></div></div>
+            <div><div class="detail-label">Last visit</div><div class="detail-value">${formatDate(l.last_visit)}</div></div>
+            <div><div class="detail-label">Last email click</div><div class="detail-value">${formatDate(l.last_email_click)}</div></div>
+            <div><div class="detail-label">Emails opened</div><div class="detail-value">${l.email_opens}</div></div>
+            <div><div class="detail-label">Recent form</div><div class="detail-value">${l.recent_form||'N/A'}</div></div>
+            <div><div class="detail-label">All signals</div><div class="detail-value">${l.signals.join(', ')}</div></div>
+        </div></td>`; tbody.appendChild(dr);
     });
 }
-
 function filterAndSort() {
-    let f = [...LEADS_DATA];
-    if (searchQuery) { const q = searchQuery.toLowerCase(); f = f.filter(l => l.name.toLowerCase().includes(q) || l.email.toLowerCase().includes(q) || (l.company||'').toLowerCase().includes(q) || l.signals.some(s => s.toLowerCase().includes(q))); }
-    switch(currentFilter) {
-        case 'mql': f = f.filter(l => l.lifecycle === 'marketingqualifiedlead'); break;
-        case 'lead': f = f.filter(l => l.lifecycle === 'lead'); break;
-        case 'nurture': f = f.filter(l => l.lifecycle === '1232155415'); break;
-        case 'pricing': f = f.filter(l => l.signals.some(s => s.includes('/pricing'))); break;
-        case 'committee': f = f.filter(l => l.committee >= 2); break;
-        case 'email-active': f = f.filter(l => l.signals.some(s => s.includes('email click this week'))); break;
+    let f=[...LEADS_DATA];
+    if(searchQuery){const q=searchQuery.toLowerCase();f=f.filter(l=>l.name.toLowerCase().includes(q)||l.email.toLowerCase().includes(q)||(l.company||'').toLowerCase().includes(q)||l.signals.some(s=>s.toLowerCase().includes(q)));}
+    switch(currentFilter){
+        case 'mql':f=f.filter(l=>l.lifecycle==='marketingqualifiedlead');break;
+        case 'lead':f=f.filter(l=>l.lifecycle==='lead');break;
+        case 'nurture':f=f.filter(l=>l.lifecycle==='1232155415');break;
+        case 'pricing':f=f.filter(l=>l.signals.some(s=>s.includes('/pricing')));break;
+        case 'committee':f=f.filter(l=>l.committee>=2);break;
+        case 'email-active':f=f.filter(l=>l.signals.some(s=>s.includes('email click this week')));break;
     }
-    switch(currentSort) {
-        case 'prob-desc': f.sort((a,b) => b.demo_prob - a.demo_prob); break;
-        case 'score-desc': f.sort((a,b) => b.score - a.score); break;
-        case 'pageviews-desc': f.sort((a,b) => b.page_views - a.page_views); break;
-        case 'sessions-desc': f.sort((a,b) => b.sessions - a.sessions); break;
-        case 'clicks-desc': f.sort((a,b) => b.email_clicks - a.email_clicks); break;
+    switch(currentSort){
+        case 'prob-desc':f.sort((a,b)=>b.demo_prob-a.demo_prob);break;
+        case 'score-desc':f.sort((a,b)=>b.score-a.score);break;
+        case 'pageviews-desc':f.sort((a,b)=>b.page_views-a.page_views);break;
+        case 'sessions-desc':f.sort((a,b)=>b.sessions-a.sessions);break;
+        case 'clicks-desc':f.sort((a,b)=>b.email_clicks-a.email_clicks);break;
     }
-    renderTldr(f);
-    renderStats(f);
-    renderLeads(f);
-    renderActions(f);
+    renderTldr(f); renderStats(f); renderLeads(f); renderActions(f);
 }
-
-// Events
-document.getElementById('search').addEventListener('input', e => { searchQuery = e.target.value; filterAndSort(); });
-document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentFilter = btn.dataset.filter;
-        filterAndSort();
-    });
-});
-document.getElementById('sort-select').addEventListener('change', e => { currentSort = e.target.value; filterAndSort(); });
-document.addEventListener('click', e => {
-    if (e.target.classList.contains('expand-btn')) {
-        const detail = document.getElementById(`detail-${e.target.dataset.id}`);
-        detail.classList.toggle('open');
-        e.target.classList.toggle('open');
-    }
-});
-document.getElementById('method-toggle').addEventListener('click', function() {
-    this.classList.toggle('open');
-    document.getElementById('method-panel').classList.toggle('open');
-});
-
-// Init
-document.getElementById('timestamp').textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+document.getElementById('search').addEventListener('input',e=>{searchQuery=e.target.value;filterAndSort();});
+document.querySelectorAll('.filter-btn').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');currentFilter=b.dataset.filter;filterAndSort();});});
+document.getElementById('sort-select').addEventListener('change',e=>{currentSort=e.target.value;filterAndSort();});
+document.addEventListener('click',e=>{if(e.target.classList.contains('expand-btn')){document.getElementById(`detail-${e.target.dataset.id}`).classList.toggle('open');e.target.classList.toggle('open');}});
+document.getElementById('method-toggle').addEventListener('click',function(){this.classList.toggle('open');document.getElementById('method-panel').classList.toggle('open');});
+document.getElementById('timestamp').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 filterAndSort();
 </script>
 </body>

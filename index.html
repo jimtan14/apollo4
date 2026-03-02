@@ -4,329 +4,619 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pipeline by Intent Analyzer | AirOps</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Inconsolata:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        /* ── AirOps Brand Design System ── */
         :root {
-            --bg: #0a0a0f;
-            --surface: #12121a;
-            --surface-2: #1a1a26;
-            --border: #2a2a3a;
-            --text: #e8e8f0;
-            --text-dim: #8888a0;
-            --accent: #6366f1;
-            --accent-glow: rgba(99, 102, 241, 0.15);
-            --green: #22c55e;
-            --green-dim: rgba(34, 197, 94, 0.15);
-            --amber: #f59e0b;
-            --amber-dim: rgba(245, 158, 11, 0.15);
-            --red: #ef4444;
-            --red-dim: rgba(239, 68, 68, 0.15);
-            --cyan: #06b6d4;
-            --cyan-dim: rgba(6, 182, 212, 0.15);
+            --ao-primary: #4d65ff;
+            --ao-primary-dim: rgba(77, 101, 255, 0.12);
+            --ao-primary-glow: rgba(77, 101, 255, 0.20);
+            --ao-bg: #141414;
+            --ao-surface: #1a1a1a;
+            --ao-surface-2: #222222;
+            --ao-border: #3F3F3F;
+            --ao-border-subtle: rgba(255, 255, 255, 0.08);
+            --ao-border-hover: rgba(255, 255, 255, 0.15);
+            --ao-text: #ffffff;
+            --ao-text-secondary: #C4C4C4;
+            --ao-text-muted: #A8ABB5;
+            --ao-olive: #6F783C;
+            --ao-olive-dim: rgba(111, 120, 60, 0.16);
+            --ao-rose: #B96464;
+            --ao-rose-dim: rgba(185, 100, 100, 0.16);
+            --ao-purple: #852952;
+            --ao-purple-dim: rgba(133, 41, 82, 0.16);
+            --ao-navy: #0F0F57;
+            --ao-green: #53724E;
+            --ao-green-bright: #6B9F63;
+            --ao-green-dim: rgba(83, 114, 78, 0.16);
+            --ao-amber: #D4A843;
+            --ao-amber-dim: rgba(212, 168, 67, 0.14);
+            --font-serif: 'Merriweather', Georgia, serif;
+            --font-mono: 'Inconsolata', 'Courier New', monospace;
+            --font-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background: var(--bg);
-            color: var(--text);
+            font-family: var(--font-system);
+            background: var(--ao-bg);
+            color: var(--ao-text);
             min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
         }
 
-        /* Header */
+        /* ── Header ── */
         .header {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 20px 32px;
+            background: var(--ao-surface);
+            border-bottom: 1px solid var(--ao-border-subtle);
+            padding: 20px 40px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
         .header-left { display: flex; align-items: center; gap: 16px; }
-        .logo {
-            width: 36px; height: 36px;
-            background: linear-gradient(135deg, var(--accent), #a78bfa);
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 16px;
+        .logo-mark {
+            display: flex; align-items: center; gap: 10px;
         }
-        .header h1 { font-size: 20px; font-weight: 600; }
-        .header h1 span { color: var(--text-dim); font-weight: 400; }
+        .logo-mark svg { width: 32px; height: 32px; }
+        .header-title {
+            font-family: var(--font-serif);
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+        .header-title span {
+            color: var(--ao-text-muted);
+            font-weight: 300;
+            font-family: var(--font-system);
+            font-size: 14px;
+            margin-left: 8px;
+        }
         .header-right { display: flex; gap: 12px; align-items: center; }
         .badge {
-            font-size: 11px; padding: 4px 10px;
-            border-radius: 20px; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 0.5px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .badge-live { background: var(--green-dim); color: var(--green); }
-        .badge-source { background: var(--accent-glow); color: var(--accent); }
-        .timestamp { color: var(--text-dim); font-size: 13px; }
+        .badge-live { background: var(--ao-green-dim); color: var(--ao-green-bright); border: 1px solid rgba(107, 159, 99, 0.25); }
+        .badge-hubspot { background: var(--ao-primary-dim); color: var(--ao-primary); border: 1px solid rgba(77, 101, 255, 0.2); }
+        .timestamp { color: var(--ao-text-muted); font-size: 12px; font-family: var(--font-mono); }
 
-        /* Stats Row */
+        /* ── TL;DR Section (AirOps brand voice) ── */
+        .tldr {
+            padding: 24px 40px 0;
+        }
+        .tldr-card {
+            background: linear-gradient(135deg, var(--ao-green-dim), rgba(83, 114, 78, 0.06));
+            border: 1px solid rgba(83, 114, 78, 0.2);
+            border-radius: 8px;
+            padding: 20px 24px;
+        }
+        .tldr-label {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--ao-green-bright);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+        }
+        .tldr-content {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--ao-text-secondary);
+        }
+        .tldr-content strong { color: var(--ao-text); font-weight: 700; }
+
+        /* ── Stats Row ── */
         .stats-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 16px;
-            padding: 24px 32px;
+            padding: 24px 40px;
         }
         .stat-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
+            background: var(--ao-surface);
+            border: 1px solid var(--ao-border-subtle);
+            border-radius: 8px;
+            padding: 20px 24px;
+            transition: border-color 0.3s ease;
         }
-        .stat-label { font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-        .stat-value { font-size: 32px; font-weight: 700; }
-        .stat-sub { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
-        .stat-value.green { color: var(--green); }
-        .stat-value.amber { color: var(--amber); }
-        .stat-value.accent { color: var(--accent); }
-        .stat-value.cyan { color: var(--cyan); }
+        .stat-card:hover { border-color: var(--ao-border-hover); }
+        .stat-label {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--ao-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .stat-value {
+            font-family: var(--font-serif);
+            font-size: 36px;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .stat-sub { font-size: 12px; color: var(--ao-text-muted); margin-top: 6px; }
+        .stat-value.green { color: var(--ao-green-bright); }
+        .stat-value.amber { color: var(--ao-amber); }
+        .stat-value.primary { color: var(--ao-primary); }
+        .stat-value.olive { color: var(--ao-olive); }
 
-        /* Controls */
-        .controls {
-            padding: 0 32px 16px;
+        /* ── Scoring Methodology ── */
+        .methodology {
+            padding: 0 40px 8px;
+        }
+        .methodology-toggle {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--ao-text-muted);
+            background: none;
+            border: none;
+            cursor: pointer;
             display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 0;
+            transition: color 0.2s;
+        }
+        .methodology-toggle:hover { color: var(--ao-primary); }
+        .methodology-toggle .arrow { transition: transform 0.2s; font-size: 10px; }
+        .methodology-toggle.open .arrow { transform: rotate(90deg); }
+        .methodology-panel {
+            display: none;
+            background: var(--ao-surface);
+            border: 1px solid var(--ao-border-subtle);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+        }
+        .methodology-panel.open { display: block; }
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 12px;
+        }
+        .method-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--ao-surface-2);
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .method-item .label { color: var(--ao-text-secondary); }
+        .method-item .pts {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            color: var(--ao-primary);
+        }
+
+        /* ── Controls ── */
+        .controls {
+            padding: 0 40px 16px;
+            display: flex;
+            gap: 10px;
             align-items: center;
             flex-wrap: wrap;
         }
         .search-box {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
+            background: var(--ao-surface);
+            border: 1px solid var(--ao-border-subtle);
+            border-radius: 6px;
             padding: 10px 14px;
-            color: var(--text);
-            font-size: 14px;
-            width: 280px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .search-box:focus { border-color: var(--accent); }
-        .search-box::placeholder { color: var(--text-dim); }
-        .filter-btn {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 10px 16px;
-            color: var(--text-dim);
+            color: var(--ao-text);
             font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
+            font-family: var(--font-system);
+            width: 260px;
+            outline: none;
+            transition: border-color 0.3s ease;
         }
-        .filter-btn:hover, .filter-btn.active {
-            border-color: var(--accent);
-            color: var(--text);
-            background: var(--accent-glow);
+        .search-box:focus { border-color: var(--ao-primary); outline: 0.125rem solid rgba(77, 101, 255, 0.3); outline-offset: 0.125rem; }
+        .search-box::placeholder { color: var(--ao-text-muted); }
+        .filter-btn {
+            background: var(--ao-surface);
+            border: 1px solid var(--ao-border-subtle);
+            border-radius: 6px;
+            padding: 9px 16px;
+            color: var(--ao-text-muted);
+            font-size: 12px;
+            font-family: var(--font-mono);
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .filter-btn:hover {
+            border-color: var(--ao-border-hover);
+            color: var(--ao-text-secondary);
+        }
+        .filter-btn.active {
+            border-color: var(--ao-primary);
+            color: var(--ao-primary);
+            background: var(--ao-primary-dim);
         }
         .sort-select {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 10px 14px;
-            color: var(--text);
-            font-size: 13px;
+            background: var(--ao-surface);
+            border: 1px solid var(--ao-border-subtle);
+            border-radius: 6px;
+            padding: 9px 14px;
+            color: var(--ao-text-secondary);
+            font-size: 12px;
+            font-family: var(--font-mono);
             cursor: pointer;
             outline: none;
             margin-left: auto;
         }
 
-        /* Table */
-        .table-container {
-            padding: 0 32px 32px;
-        }
+        /* ── Table ── */
+        .table-container { padding: 0 40px 40px; }
         .lead-table {
             width: 100%;
             border-collapse: collapse;
-            background: var(--surface);
-            border-radius: 12px;
+            background: var(--ao-surface);
+            border-radius: 8px;
             overflow: hidden;
-            border: 1px solid var(--border);
+            border: 1px solid var(--ao-border-subtle);
         }
         .lead-table thead th {
-            background: var(--surface-2);
+            background: var(--ao-surface-2);
             padding: 14px 16px;
             text-align: left;
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-dim);
+            font-size: 10px;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            color: var(--ao-text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 1px solid var(--border);
-            cursor: pointer;
-            user-select: none;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--ao-border-subtle);
             white-space: nowrap;
         }
-        .lead-table thead th:hover { color: var(--text); }
-        .lead-table thead th .sort-icon { margin-left: 4px; opacity: 0.4; }
-        .lead-table thead th.sorted .sort-icon { opacity: 1; color: var(--accent); }
         .lead-table tbody tr {
-            border-bottom: 1px solid var(--border);
-            transition: background 0.15s;
+            border-bottom: 1px solid var(--ao-border-subtle);
+            transition: background 0.2s ease;
         }
-        .lead-table tbody tr:hover { background: var(--surface-2); }
+        .lead-table tbody tr:hover { background: var(--ao-surface-2); }
         .lead-table tbody tr:last-child { border-bottom: none; }
         .lead-table td { padding: 14px 16px; font-size: 13px; vertical-align: middle; }
 
-        /* Rank */
+        /* ── Rank ── */
         .rank {
             width: 28px; height: 28px;
-            border-radius: 50%;
+            border-radius: 4px;
             display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-mono);
             font-weight: 700; font-size: 12px;
         }
-        .rank-1 { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #000; }
-        .rank-2 { background: linear-gradient(135deg, #d1d5db, #9ca3af); color: #000; }
-        .rank-3 { background: linear-gradient(135deg, #d97706, #b45309); color: #fff; }
-        .rank-other { background: var(--surface-2); color: var(--text-dim); }
+        .rank-1 { background: var(--ao-olive-dim); color: var(--ao-olive); border: 1px solid rgba(111, 120, 60, 0.3); }
+        .rank-2 { background: var(--ao-primary-dim); color: var(--ao-primary); border: 1px solid rgba(77, 101, 255, 0.2); }
+        .rank-3 { background: var(--ao-rose-dim); color: var(--ao-rose); border: 1px solid rgba(185, 100, 100, 0.2); }
+        .rank-other { background: var(--ao-surface-2); color: var(--ao-text-muted); border: 1px solid var(--ao-border-subtle); }
 
-        /* Score bar */
-        .score-cell { display: flex; align-items: center; gap: 10px; }
-        .score-bar-bg {
-            width: 80px; height: 6px;
-            background: var(--surface-2);
-            border-radius: 3px;
-            overflow: hidden;
+        /* ── Demo Probability ── */
+        .prob-cell { display: flex; align-items: center; gap: 10px; }
+        .prob-ring {
+            width: 44px; height: 44px;
+            position: relative;
         }
-        .score-bar {
-            height: 100%;
-            border-radius: 3px;
-            transition: width 0.6s ease;
+        .prob-ring svg { transform: rotate(-90deg); }
+        .prob-ring circle {
+            fill: none;
+            stroke-width: 3;
+            stroke-linecap: round;
         }
-        .score-num { font-weight: 700; font-size: 15px; min-width: 32px; }
-        .score-high .score-bar { background: linear-gradient(90deg, var(--green), #4ade80); }
-        .score-high .score-num { color: var(--green); }
-        .score-med .score-bar { background: linear-gradient(90deg, var(--amber), #fbbf24); }
-        .score-med .score-num { color: var(--amber); }
-        .score-low .score-bar { background: linear-gradient(90deg, var(--red), #f87171); }
-        .score-low .score-num { color: var(--text-dim); }
+        .prob-ring .bg { stroke: var(--ao-surface-2); }
+        .prob-ring .fg { transition: stroke-dashoffset 0.8s ease; }
+        .prob-pct {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 11px;
+        }
+        .prob-high .fg { stroke: var(--ao-green-bright); }
+        .prob-high .prob-pct { color: var(--ao-green-bright); }
+        .prob-med .fg { stroke: var(--ao-amber); }
+        .prob-med .prob-pct { color: var(--ao-amber); }
+        .prob-low .fg { stroke: var(--ao-rose); }
+        .prob-low .prob-pct { color: var(--ao-text-muted); }
 
-        /* Lead info */
-        .lead-name { font-weight: 600; margin-bottom: 2px; }
-        .lead-email { color: var(--text-dim); font-size: 12px; }
-        .lead-company { color: var(--cyan); font-size: 12px; }
+        .intent-score {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--ao-text-secondary);
+        }
 
-        /* Signals */
-        .signals { display: flex; flex-wrap: wrap; gap: 4px; max-width: 320px; }
+        /* ── Lead Info ── */
+        .lead-name {
+            font-family: var(--font-serif);
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        .lead-email { color: var(--ao-text-muted); font-size: 12px; font-family: var(--font-mono); }
+        .lead-company { color: var(--ao-primary); font-size: 12px; margin-top: 2px; }
+
+        /* ── Signals ── */
+        .signals { display: flex; flex-wrap: wrap; gap: 4px; max-width: 340px; }
         .signal-tag {
+            font-family: var(--font-mono);
             font-size: 10px;
             padding: 3px 8px;
-            border-radius: 4px;
-            font-weight: 500;
+            border-radius: 3px;
+            font-weight: 400;
             white-space: nowrap;
+            letter-spacing: 0.2px;
         }
-        .signal-hot { background: var(--green-dim); color: var(--green); }
-        .signal-warm { background: var(--amber-dim); color: var(--amber); }
-        .signal-info { background: var(--accent-glow); color: var(--accent); }
-        .signal-neutral { background: var(--surface-2); color: var(--text-dim); }
+        .signal-hot { background: var(--ao-green-dim); color: var(--ao-green-bright); border: 1px solid rgba(107, 159, 99, 0.15); }
+        .signal-warm { background: var(--ao-olive-dim); color: #A3AC6A; border: 1px solid rgba(111, 120, 60, 0.15); }
+        .signal-info { background: var(--ao-primary-dim); color: var(--ao-primary); border: 1px solid rgba(77, 101, 255, 0.1); }
+        .signal-neutral { background: var(--ao-surface-2); color: var(--ao-text-muted); border: 1px solid var(--ao-border-subtle); }
 
-        /* Source badge */
+        /* ── Source Badge ── */
         .source-badge {
-            font-size: 11px; padding: 4px 10px;
-            border-radius: 6px; font-weight: 500;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-weight: 700;
             display: inline-block;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
-        .src-organic { background: var(--green-dim); color: var(--green); }
-        .src-paid { background: var(--amber-dim); color: var(--amber); }
-        .src-direct { background: var(--cyan-dim); color: var(--cyan); }
-        .src-email { background: var(--accent-glow); color: var(--accent); }
-        .src-referral { background: rgba(168, 85, 247, 0.15); color: #a855f7; }
-        .src-social { background: rgba(236, 72, 153, 0.15); color: #ec4899; }
-        .src-offline { background: var(--surface-2); color: var(--text-dim); }
-        .src-ai { background: rgba(99, 102, 241, 0.2); color: #818cf8; }
+        .src-organic { background: var(--ao-green-dim); color: var(--ao-green-bright); }
+        .src-paid { background: var(--ao-amber-dim); color: var(--ao-amber); }
+        .src-direct { background: var(--ao-primary-dim); color: var(--ao-primary); }
+        .src-email { background: var(--ao-purple-dim); color: #C46B94; }
+        .src-referral { background: var(--ao-olive-dim); color: #A3AC6A; }
+        .src-social { background: var(--ao-rose-dim); color: var(--ao-rose); }
+        .src-offline { background: var(--ao-surface-2); color: var(--ao-text-muted); }
+        .src-ai { background: var(--ao-primary-glow); color: #8B9DFF; }
 
-        /* Metric cells */
-        .metric { text-align: center; font-variant-numeric: tabular-nums; }
-        .metric-highlight { color: var(--green); font-weight: 600; }
+        /* ── Metrics ── */
+        .metric {
+            text-align: center;
+            font-family: var(--font-mono);
+            font-variant-numeric: tabular-nums;
+            color: var(--ao-text-secondary);
+        }
+        .metric-highlight { color: var(--ao-green-bright); font-weight: 700; }
 
-        /* Lifecycle */
-        .lc-mql { color: var(--green); font-weight: 600; }
-        .lc-lead { color: var(--amber); }
-        .lc-nurture { color: var(--accent); }
-        .lc-subscriber { color: var(--text-dim); }
+        /* ── Lifecycle ── */
+        .lc-mql { color: var(--ao-green-bright); font-weight: 700; font-family: var(--font-mono); font-size: 12px; }
+        .lc-lead { color: var(--ao-amber); font-family: var(--font-mono); font-size: 12px; }
+        .lc-nurture { color: var(--ao-primary); font-family: var(--font-mono); font-size: 12px; }
+        .lc-subscriber { color: var(--ao-text-muted); font-family: var(--font-mono); font-size: 12px; }
 
-        /* Expand row */
+        /* ── Buying Committee Badge ── */
+        .committee-badge {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 3px;
+            background: var(--ao-rose-dim);
+            color: var(--ao-rose);
+            border: 1px solid rgba(185, 100, 100, 0.2);
+        }
+
+        /* ── Expand Row ── */
         .expand-btn {
-            background: none; border: none; color: var(--text-dim);
-            cursor: pointer; font-size: 16px; padding: 4px;
-            transition: transform 0.2s, color 0.2s;
+            background: none;
+            border: 1px solid var(--ao-border-subtle);
+            color: var(--ao-text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-family: var(--font-mono);
         }
-        .expand-btn:hover { color: var(--text); }
-        .expand-btn.open { transform: rotate(90deg); }
+        .expand-btn:hover { color: var(--ao-primary); border-color: var(--ao-primary); }
+        .expand-btn.open { transform: rotate(90deg); color: var(--ao-primary); }
         .detail-row { display: none; }
         .detail-row.open { display: table-row; }
         .detail-row td {
-            padding: 16px 16px 16px 60px;
-            background: var(--surface-2);
-            border-bottom: 1px solid var(--border);
+            padding: 20px 16px 20px 60px;
+            background: var(--ao-surface-2);
+            border-bottom: 1px solid var(--ao-border-subtle);
         }
         .detail-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 16px;
         }
-        .detail-item { }
-        .detail-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-        .detail-value { font-size: 13px; }
-        .detail-value a { color: var(--accent); text-decoration: none; }
-        .detail-value a:hover { text-decoration: underline; }
+        .detail-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--ao-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+        .detail-value { font-size: 13px; color: var(--ao-text-secondary); }
+        .detail-value a { color: var(--ao-primary); text-decoration: none; transition: opacity 0.2s; }
+        .detail-value a:hover { opacity: 0.8; text-decoration: underline; }
 
-        /* Responsive */
+        /* ── What to Do Next (AirOps brand voice) ── */
+        .action-section {
+            padding: 0 40px;
+            margin-bottom: 24px;
+        }
+        .action-label {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--ao-primary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+        }
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        .action-card {
+            background: var(--ao-surface);
+            border: 1px solid var(--ao-border-subtle);
+            border-radius: 8px;
+            padding: 16px 20px;
+            transition: border-color 0.3s ease;
+        }
+        .action-card:hover { border-color: var(--ao-border-hover); }
+        .action-card h4 {
+            font-family: var(--font-serif);
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .action-card p { font-size: 12px; color: var(--ao-text-muted); line-height: 1.6; }
+        .action-card .action-lead { color: var(--ao-primary); font-family: var(--font-mono); font-size: 11px; font-weight: 700; }
+
+        /* ── Footer ── */
+        .footer {
+            padding: 20px 40px;
+            border-top: 1px solid var(--ao-border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .footer-left {
+            font-size: 12px;
+            color: var(--ao-text-muted);
+            font-family: var(--font-mono);
+        }
+        .footer-right {
+            display: flex; gap: 16px;
+        }
+        .footer-link {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--ao-text-muted);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: color 0.2s;
+        }
+        .footer-link:hover { color: var(--ao-primary); }
+
+        /* ── Responsive ── */
         @media (max-width: 1200px) {
             .stats-row { grid-template-columns: repeat(2, 1fr); }
-            .signals { max-width: 200px; }
+            .action-grid { grid-template-columns: 1fr; }
+            .method-grid { grid-template-columns: repeat(2, 1fr); }
+            .signals { max-width: 220px; }
         }
         @media (max-width: 768px) {
             .stats-row { grid-template-columns: 1fr; }
-            .header { flex-direction: column; gap: 12px; align-items: flex-start; }
-            .controls { flex-direction: column; }
+            .header { flex-direction: column; gap: 12px; align-items: flex-start; padding: 16px 20px; }
+            .controls { flex-direction: column; padding: 0 20px 16px; }
             .search-box { width: 100%; }
+            .table-container, .tldr, .action-section, .methodology { padding-left: 20px; padding-right: 20px; }
+            .detail-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <div class="header">
         <div class="header-left">
-            <div class="logo">A</div>
-            <h1>Pipeline by Intent Analyzer <span>| AirOps x HubSpot</span></h1>
+            <div class="logo-mark">
+                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="32" height="32" rx="6" fill="#4d65ff"/>
+                    <path d="M8 22L16 10L24 22H8Z" fill="white" opacity="0.9"/>
+                    <circle cx="16" cy="18" r="2.5" fill="#4d65ff"/>
+                </svg>
+                <div>
+                    <div class="header-title">Pipeline by Intent Analyzer<span>AirOps x HubSpot</span></div>
+                </div>
+            </div>
         </div>
         <div class="header-right">
-            <span class="badge badge-live">Live</span>
-            <span class="badge badge-source">HubSpot MCP</span>
+            <span class="badge badge-live">LIVE</span>
+            <span class="badge badge-hubspot">HubSpot MCP</span>
             <span class="timestamp" id="timestamp"></span>
         </div>
     </div>
 
+    <!-- TL;DR Section -->
+    <div class="tldr">
+        <div class="tldr-card">
+            <div class="tldr-label">TL;DR</div>
+            <div class="tldr-content" id="tldr-content"></div>
+        </div>
+    </div>
+
+    <!-- Stats -->
     <div class="stats-row" id="stats-row"></div>
 
+    <!-- Scoring Methodology -->
+    <div class="methodology">
+        <button class="methodology-toggle" id="method-toggle">
+            <span class="arrow">&#9654;</span> How the demo probability score works
+        </button>
+        <div class="methodology-panel" id="method-panel">
+            <div class="method-grid">
+                <div class="method-item"><span class="label">Buying committee (4+ contacts)</span><span class="pts">+25</span></div>
+                <div class="method-item"><span class="label">Base intent score (normalized)</span><span class="pts">+30</span></div>
+                <div class="method-item"><span class="label">Visited /pricing page</span><span class="pts">+15</span></div>
+                <div class="method-item"><span class="label">MQL lifecycle stage</span><span class="pts">+12</span></div>
+                <div class="method-item"><span class="label">Active this week (email + visit)</span><span class="pts">+15</span></div>
+                <div class="method-item"><span class="label">High-intent form (demo/growth expert)</span><span class="pts">+15</span></div>
+                <div class="method-item"><span class="label">Email engagement ratio (click/open)</span><span class="pts">+8</span></div>
+                <div class="method-item"><span class="label">Deep session count (50+)</span><span class="pts">+8</span></div>
+                <div class="method-item"><span class="label">Referral source quality</span><span class="pts">+7</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls -->
     <div class="controls">
         <input type="text" class="search-box" id="search" placeholder="Search leads, companies, emails...">
-        <button class="filter-btn active" data-filter="all">All Leads</button>
+        <button class="filter-btn active" data-filter="all">All</button>
         <button class="filter-btn" data-filter="mql">MQL</button>
         <button class="filter-btn" data-filter="lead">Lead</button>
         <button class="filter-btn" data-filter="nurture">Nurture</button>
-        <button class="filter-btn" data-filter="pricing">Visited Pricing</button>
+        <button class="filter-btn" data-filter="pricing">Pricing</button>
+        <button class="filter-btn" data-filter="committee">Committee</button>
         <button class="filter-btn" data-filter="email-active">Email Active</button>
         <select class="sort-select" id="sort-select">
-            <option value="score-desc">Score: High to Low</option>
-            <option value="score-asc">Score: Low to High</option>
+            <option value="prob-desc">Demo Probability: High</option>
+            <option value="score-desc">Intent Score: High</option>
             <option value="pageviews-desc">Page Views: Most</option>
             <option value="sessions-desc">Sessions: Most</option>
             <option value="clicks-desc">Email Clicks: Most</option>
         </select>
     </div>
 
+    <!-- Table -->
     <div class="table-container">
         <table class="lead-table">
             <thead>
                 <tr>
-                    <th style="width:40px">#</th>
-                    <th>Intent Score</th>
+                    <th style="width:36px">#</th>
+                    <th>Demo Prob.</th>
+                    <th>Intent</th>
                     <th>Lead</th>
                     <th>Source</th>
                     <th>Stage</th>
                     <th class="metric">Views</th>
                     <th class="metric">Sessions</th>
                     <th class="metric">Clicks</th>
-                    <th>Intent Signals</th>
+                    <th>Signals</th>
                     <th style="width:36px"></th>
                 </tr>
             </thead>
@@ -334,182 +624,165 @@
         </table>
     </div>
 
+    <!-- What to Do Next -->
+    <div class="action-section">
+        <div class="action-label">What to do next</div>
+        <div class="action-grid" id="action-grid"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-left">Pipeline by Intent Analyzer &middot; Powered by AirOps Brand Kit + HubSpot MCP</div>
+        <div class="footer-right">
+            <a href="https://www.airops.com" class="footer-link" target="_blank">airops.com</a>
+        </div>
+    </div>
+
 <script>
 const LEADS_DATA = [
-  {"id":"162780474411","name":"Shirley Sweeney","email":"shirley@surveycto.com","company":"SurveyCTO","score":155,"signals":["329 page views","66 sessions","4 email clicks","13 emails opened","email click this week","visited this week","visited /pricing","5 form submissions","MQL","src: Direct Traffic"],"page_views":329,"sessions":66,"email_clicks":4,"email_opens":13,"lifecycle":"marketingqualifiedlead","source":"DIRECT_TRAFFIC","last_url":"https://www.airops.com/kyle-poyar-x-airops-webinar-gtm-ai-search","last_visit":"2026-02-27T18:12:00","last_email_click":"2026-02-27T18:12:52","recent_form":"Search Playbook for Marketers"},
-  {"id":"157655299052","name":"Noa Segol","email":"noa@practitest.com","company":"PractiTest","score":135,"signals":["115 page views","38 sessions","4 email clicks","12 emails opened","email click this week","visited this week","visited /pricing","MQL","src: Direct Traffic"],"page_views":115,"sessions":38,"email_clicks":4,"email_opens":12,"lifecycle":"marketingqualifiedlead","source":"DIRECT_TRAFFIC","last_url":"https://www.airops.com/kyle-poyar-x-airops-webinar-gtm-ai-search","last_visit":"2026-03-01T07:16:00","last_email_click":"2026-03-01T07:16:46","recent_form":""},
-  {"id":"105233818701","name":"Matteo Tittarelli","email":"matteo.tittarelli@gmail.com","company":"","score":130,"signals":["670 page views","98 sessions","4 email clicks","10 emails opened","visited this week","visited /pricing","8 form submissions","Lead","src: Direct Traffic"],"page_views":670,"sessions":98,"email_clicks":4,"email_opens":10,"lifecycle":"lead","source":"DIRECT_TRAFFIC","last_url":"https://app.airops.com/genesys-growth-0/data/brand_kits/332/product_lines/25177","last_visit":"2026-02-26T18:49:00","last_email_click":"2026-02-21T07:28:20","recent_form":"Search Playbook for Marketers"},
-  {"id":"105213498318","name":"Rachit Bhatia","email":"rachit@vidyo.ai","company":"quso.ai","score":128,"signals":["2443 page views","267 sessions","1 email clicks","6 emails opened","visited this week","visited /pricing","6 form submissions","MQL","src: Organic Search"],"page_views":2443,"sessions":267,"email_clicks":1,"email_opens":6,"lifecycle":"marketingqualifiedlead","source":"ORGANIC_SEARCH","last_url":"https://www.airops.com/","last_visit":"2026-02-26T18:51:00","last_email_click":"2026-01-30T17:28:22","recent_form":"Manage audience | AirOps Learning Hub"},
-  {"id":"105254629577","name":"Nupur Mittal","email":"nupur.mittal@baselane.com","company":"Baselane","score":128,"signals":["83 page views","29 sessions","4 email clicks","15 emails opened","email click this week","visited this week","2 form submissions","Nurture","src: Paid Search"],"page_views":83,"sessions":29,"email_clicks":4,"email_opens":15,"lifecycle":"1232155415","source":"PAID_SEARCH","last_url":"https://www.airops.com/blog/content-refresh-templates-and-frameworks","last_visit":"2026-02-25T20:01:00","last_email_click":"2026-02-27T18:31:07","recent_form":"Become an AI marketing expert in 2-week"},
-  {"id":"105214455792","name":"Jocelyn Ke","email":"jocelyn@leadsie.com","company":"Leadsie","score":125,"signals":["332 page views","48 sessions","5 email clicks","8 emails opened","email click this week","visited this week","2 form submissions","Lead","src: Direct Traffic"],"page_views":332,"sessions":48,"email_clicks":5,"email_opens":8,"lifecycle":"lead","source":"DIRECT_TRAFFIC","last_url":"https://app.airops.com/leadsie-0/usage/task-usage","last_visit":"2026-02-28T10:09:00","last_email_click":"2026-02-22T09:03:11","recent_form":"Become an AI marketing expert in 4 week"},
-  {"id":"105236050814","name":"Abbie Baxter","email":"abbie.baxter@voyantis.ai","company":"Voyantis","score":125,"signals":["43 page views","27 sessions","4 email clicks","13 emails opened","email click this week","visited this week","2 form submissions","Lead","src: Direct Traffic"],"page_views":43,"sessions":27,"email_clicks":4,"email_opens":13,"lifecycle":"lead","source":"DIRECT_TRAFFIC","last_url":"https://www.airops.com/webinar-claude-code-in-action-with-noah-learner","last_visit":"2026-02-27T18:15:00","last_email_click":"2026-02-27T18:15:35","recent_form":"Become an AI marketing expert in 4 week"},
-  {"id":"105251252131","name":"Mano Ya","email":"manoharah98@gmail.com","company":"Gartner","score":125,"signals":["142 page views","97 sessions","4 email clicks","10 emails opened","email click this week","visited this week","11 form submissions","Lead","src: Offline"],"page_views":142,"sessions":97,"email_clicks":4,"email_opens":10,"lifecycle":"lead","source":"OFFLINE","last_url":"https://www.airops.com/blog/webinar-recap-the-bofu-content-lashay-lewis","last_visit":"2026-02-28T02:11:00","last_email_click":"2026-02-28T02:27:00","recent_form":"Search Playbook for Marketers"},
-  {"id":"105221698277","name":"Ivab Peric","email":"ivan@contentmotion.io","company":"ContentMotion","score":121,"signals":["4474 page views","274 sessions","2 email clicks","10 emails opened","email click this week","visited this week","4 form submissions","Nurture","src: Organic Search"],"page_views":4474,"sessions":274,"email_clicks":2,"email_opens":10,"lifecycle":"1232155415","source":"ORGANIC_SEARCH","last_url":"https://www.airops.com/","last_visit":"2026-02-25T17:02:00","last_email_click":"2026-02-22T08:36:27","recent_form":"Search Playbook for Marketers"},
-  {"id":"105233614098","name":"Mindaugas Sarpis","email":"mindaugas@omnisend.com","company":"Omnisend","score":120,"signals":["2860 page views","309 sessions","3 email clicks","14 emails opened","visited this week","3 form submissions","MQL","src: Offline"],"page_views":2860,"sessions":309,"email_clicks":3,"email_opens":14,"lifecycle":"marketingqualifiedlead","source":"OFFLINE","last_url":"https://app.airops.com/omnisend-3/workflows/129171/edit","last_visit":"2026-02-23T11:42:00","last_email_click":"2026-02-19T07:55:12","recent_form":"Winning Brand Campaign Quiz 1"},
-  {"id":"105226668236","name":"Daragh Nener-Lally","email":"daragh@autods.com","company":"AutoDS","score":120,"signals":["642 page views","103 sessions","4 email clicks","6 emails opened","email click this week","visited this week","1 form submission","MQL","src: Referrals"],"page_views":642,"sessions":103,"email_clicks":4,"email_opens":6,"lifecycle":"marketingqualifiedlead","source":"REFERRALS","last_url":"https://app.airops.com/onboarding/join","last_visit":"2026-03-01T14:55:00","last_email_click":"2026-03-01T13:29:49","recent_form":"Winning Brand Campaign Quiz 1"},
-  {"id":"105234419152","name":"Artem Kalugin","email":"artem.kalugin@gmail.com","company":"","score":120,"signals":["184 page views","62 sessions","4 email clicks","8 emails opened","email click this week","visited this week","3 form submissions","Lead","src: Email Marketing"],"page_views":184,"sessions":62,"email_clicks":4,"email_opens":8,"lifecycle":"lead","source":"EMAIL_MARKETING","last_url":"https://www.airops.com/webinar-claude-code-in-action-with-noah-learner","last_visit":"2026-02-28T10:00:00","last_email_click":"2026-02-28T10:02:02","recent_form":"Search Playbook for Marketers"},
-  {"id":"105233893775","name":"Diane Leyman","email":"diane.leyman@lyssna.com","company":"Lyssna","score":120,"signals":["434 page views","23 sessions","4 email clicks","14 emails opened","email click this week","3 form submissions","MQL","src: Offline"],"page_views":434,"sessions":23,"email_clicks":4,"email_opens":14,"lifecycle":"marketingqualifiedlead","source":"OFFLINE","last_url":"https://app.airops.com/cohort-5-0/browse","last_visit":"2026-02-19T23:46:00","last_email_click":"2026-03-01T21:54:07","recent_form":"Winning Brand Campaign Quiz 1"},
-  {"id":"105250478340","name":"Daniel Reeves","email":"dan@subjct.ai","company":"subjct.ai","score":120,"signals":["129 page views","89 sessions","4 email clicks","9 emails opened","email click this week","visited this week","2 form submissions","Lead","src: Offline"],"page_views":129,"sessions":89,"email_clicks":4,"email_opens":9,"lifecycle":"lead","source":"OFFLINE","last_url":"https://www.airops.com/blog/webinar-recap-dave-gerhardt-exit-five","last_visit":"2026-02-25T20:32:00","last_email_click":"2026-02-22T17:46:39","recent_form":"Search Playbook for Marketers"},
-  {"id":"157564037576","name":"Aoife Ni Mheachair","email":"aoife.nimheachair@audienceview.com","company":"AudienceView","score":120,"signals":["17 page views","8 sessions","4 email clicks","5 emails opened","email click this week","visited this week","3 form submissions","MQL","src: Direct Traffic"],"page_views":17,"sessions":8,"email_clicks":4,"email_opens":5,"lifecycle":"marketingqualifiedlead","source":"DIRECT_TRAFFIC","last_url":"https://www.airops.com/exitfive-airops-content-quality-package","last_visit":"2026-02-28T05:00:00","last_email_click":"2026-02-27T15:27:14","recent_form":"Become a Certified AI Marketer"},
-  {"id":"105213478040","name":"Kate Jeziorska","email":"katej@majortom.com","company":"Major Tom","score":118,"signals":["778 page views","87 sessions","5 email clicks","17 emails opened","visited this week","2 form submissions","Nurture","src: Email Marketing"],"page_views":778,"sessions":87,"email_clicks":5,"email_opens":17,"lifecycle":"1232155415","source":"EMAIL_MARKETING","last_url":"https://learning.airops.com/c/top-common-use-cases/","last_visit":"2026-02-23T13:12:00","last_email_click":"2026-01-05T10:51:06","recent_form":"Become an AI marketing expert in 4 week"},
-  {"id":"105234068519","name":"Lukas Koeb","email":"lukas.koeb@medel.com","company":"MED-EL","score":118,"signals":["107 page views","55 sessions","4 email clicks","email click this week","visited this week","2 form submissions","Nurture","src: Referrals"],"page_views":107,"sessions":55,"email_clicks":4,"email_opens":0,"lifecycle":"1232155415","source":"REFERRALS","last_url":"https://www.airops.com/blog/10x-content-engineer","last_visit":"2026-02-23T05:39:00","last_email_click":"2026-02-23T05:39:37","recent_form":"Search Playbook for Marketers"},
-  {"id":"105234086553","name":"Anna Jelezovskaia","email":"ajelezovskaia@gladia.io","company":"Gladia","score":118,"signals":["54 page views","15 sessions","4 email clicks","16 emails opened","email click this week","visited this week","1 form submission","Nurture","src: Email Marketing"],"page_views":54,"sessions":15,"email_clicks":4,"email_opens":16,"lifecycle":"1232155415","source":"EMAIL_MARKETING","last_url":"https://www.airops.com/win","last_visit":"2026-02-23T13:42:00","last_email_click":"2026-02-25T15:35:59","recent_form":"AirOps - Talk to a Growth Expert"},
-  {"id":"105254504741","name":"Kerry Ben-Joseph","email":"kerry.benjoseph@alchemer.com","company":"Alchemer","score":115,"signals":["37 page views","12 sessions","6 email clicks","6 emails opened","email click this week","visited this week","MQL","src: Paid Search"],"page_views":37,"sessions":12,"email_clicks":6,"email_opens":6,"lifecycle":"marketingqualifiedlead","source":"PAID_SEARCH","last_url":"https://www.airops.com/blog/10x-content-engineer-one-year","last_visit":"2026-02-27T17:54:00","last_email_click":"2026-02-27T17:55:33","recent_form":""},
-  {"id":"105254430553","name":"Irene Cecotti","email":"irene.cecotti@factorial.co","company":"Factorial","score":115,"signals":["27 page views","21 sessions","6 email clicks","8 emails opened","email click this week","visited this week","MQL","src: Direct Traffic"],"page_views":27,"sessions":21,"email_clicks":6,"email_opens":8,"lifecycle":"marketingqualifiedlead","source":"DIRECT_TRAFFIC","last_url":"https://www.airops.com/report/ai-search-playbook-marketers","last_visit":"2026-02-27T07:36:00","last_email_click":"2026-02-25T08:07:50","recent_form":""}
+  {"id":"162780474411","name":"Shirley Sweeney","email":"shirley@surveycto.com","company":"SurveyCTO","score":155,"demo_prob":73,"signals":["329 page views","66 sessions","4 email clicks","13 emails opened","email click this week","visited this week","visited /pricing","5 form submissions","MQL","src: Direct Traffic"],"page_views":329,"sessions":66,"email_clicks":4,"email_opens":13,"lifecycle":"marketingqualifiedlead","source":"DIRECT_TRAFFIC","last_url":"https://www.airops.com/kyle-poyar-x-airops-webinar-gtm-ai-search","last_visit":"2026-02-27T18:12:00","last_email_click":"2026-02-27T18:12:52","recent_form":"Search Playbook for Marketers","committee":1},
+  {"id":"105213498318","name":"Rachit Bhatia","email":"rachit@vidyo.ai","company":"quso.ai","score":128,"demo_prob":72,"signals":["2443 page views","267 sessions","1 email clicks","6 emails opened","visited this week","visited /pricing","6 form submissions","MQL","src: Organic Search"],"page_views":2443,"sessions":267,"email_clicks":1,"email_opens":6,"lifecycle":"marketingqualifiedlead","source":"ORGANIC_SEARCH","last_url":"https://www.airops.com/","last_visit":"2026-02-26T18:51:00","last_email_click":"2026-01-30T17:28:22","recent_form":"Manage audience | AirOps Learning Hub","committee":2},
+  {"id":"157564037576","name":"Aoife Ni Mheachair","email":"aoife.nimheachair@audienceview.com","company":"AudienceView","score":120,"demo_prob":69,"signals":["17 page views","8 sessions","4 email clicks","5 emails opened","email click this week","visited this week","3 form submissions","MQL","src: Direct Traffic"],"page_views":17,"sessions":8,"email_clicks":4,"email_opens":5,"lifecycle":"marketingqualifiedlead","source":"DIRECT_TRAFFIC","last_url":"https://www.airops.com/exitfive-airops-content-quality-package","last_visit":"2026-02-28T05:00:00","last_email_click":"2026-02-27T15:27:14","recent_form":"Become a Certified AI Marketer","committee":4},
+  {"id":"105226668236","name":"Daragh Nener-Lally","email":"daragh@autods.com","company":"AutoDS","score":120,"demo_prob":67,"signals":["642 page views","103 sessions","4 email clicks","6 emails opened","email click this week","visited this week","1 form submission","MQL","src: Referrals"],"page_views":642,"sessions":103,"email_clicks":4,"email_opens":6,"lifecycle":"marketingqualifiedlead","source":"REFERRALS","last_url":"https://app.airops.com/onboarding/join","last_visit":"2026-03-01T14:55:00","last_email_click":"2026-03-01T13:29:49","recent_form":"Winning Brand Campaign Quiz 1","committee":2},
+  {"id":"105254430553","name":"Irene Cecotti","email":"irene.cecotti@factorial.co","company":"Factorial","score":115,"demo_prob":64,"signals":["27 page views","21 sessions","6 email clicks","8 emails opened","email click this week","visited this week","MQL","src: Direct Traffic"],"page_views":27,"sessions":21,"email_clicks":6,"email_opens":8,"lifecycle":"marketingqualifiedlead","source":"DIRECT_TRAFFIC","last_url":"https://www.airops.com/report/ai-search-playbook-marketers","last_visit":"2026-02-27T07:36:00","last_email_click":"2026-02-25T08:07:50","recent_form":"","committee":5},
+  {"id":"157655299052","name":"Noa Segol","email":"noa@practitest.com","company":"PractiTest","score":135,"demo_prob":60,"signals":["115 page views","38 sessions","4 email clicks","12 emails opened","email click this week","visited this week","visited /pricing","MQL","src: Direct Traffic"],"page_views":115,"sessions":38,"email_clicks":4,"email_opens":12,"lifecycle":"marketingqualifiedlead","source":"DIRECT_TRAFFIC","last_url":"https://www.airops.com/kyle-poyar-x-airops-webinar-gtm-ai-search","last_visit":"2026-03-01T07:16:00","last_email_click":"2026-03-01T07:16:46","recent_form":"","committee":0},
+  {"id":"105233818701","name":"Matteo Tittarelli","email":"matteo.tittarelli@gmail.com","company":"","score":130,"demo_prob":60,"signals":["670 page views","98 sessions","4 email clicks","10 emails opened","visited this week","visited /pricing","8 form submissions","Lead","src: Direct Traffic"],"page_views":670,"sessions":98,"email_clicks":4,"email_opens":10,"lifecycle":"lead","source":"DIRECT_TRAFFIC","last_url":"https://app.airops.com/genesys-growth-0/data/brand_kits/332/product_lines/25177","last_visit":"2026-02-26T18:49:00","last_email_click":"2026-02-21T07:28:20","recent_form":"Search Playbook for Marketers","committee":0},
+  {"id":"105233893775","name":"Diane Leyman","email":"diane.leyman@lyssna.com","company":"Lyssna","score":120,"demo_prob":58,"signals":["434 page views","23 sessions","4 email clicks","14 emails opened","email click this week","3 form submissions","MQL","src: Offline"],"page_views":434,"sessions":23,"email_clicks":4,"email_opens":14,"lifecycle":"marketingqualifiedlead","source":"OFFLINE","last_url":"https://app.airops.com/cohort-5-0/browse","last_visit":"2026-02-19T23:46:00","last_email_click":"2026-03-01T21:54:07","recent_form":"Winning Brand Campaign Quiz 1","committee":3},
+  {"id":"105234086553","name":"Anna Jelezovskaia","email":"ajelezovskaia@gladia.io","company":"Gladia","score":118,"demo_prob":56,"signals":["54 page views","15 sessions","4 email clicks","16 emails opened","email click this week","visited this week","1 form submission","Nurture","src: Email Marketing"],"page_views":54,"sessions":15,"email_clicks":4,"email_opens":16,"lifecycle":"1232155415","source":"EMAIL_MARKETING","last_url":"https://www.airops.com/win","last_visit":"2026-02-23T13:42:00","last_email_click":"2026-02-25T15:35:59","recent_form":"AirOps - Talk to a Growth Expert","committee":3},
+  {"id":"105251252131","name":"Mano Ya","email":"manoharah98@gmail.com","company":"Gartner","score":125,"demo_prob":52,"signals":["142 page views","97 sessions","4 email clicks","10 emails opened","email click this week","visited this week","11 form submissions","Lead","src: Offline"],"page_views":142,"sessions":97,"email_clicks":4,"email_opens":10,"lifecycle":"lead","source":"OFFLINE","last_url":"https://www.airops.com/blog/webinar-recap-the-bofu-content-lashay-lewis","last_visit":"2026-02-28T02:11:00","last_email_click":"2026-02-28T02:27:00","recent_form":"Search Playbook for Marketers","committee":1}
 ];
 
 const SOURCE_LABELS = {
-    'ORGANIC_SEARCH': 'Organic Search',
-    'PAID_SEARCH': 'Paid Search',
-    'DIRECT_TRAFFIC': 'Direct Traffic',
-    'EMAIL_MARKETING': 'Email Marketing',
-    'REFERRALS': 'Referrals',
-    'SOCIAL_MEDIA': 'Social Media',
-    'PAID_SOCIAL': 'Paid Social',
-    'AI_REFERRALS': 'AI Referrals',
-    'OFFLINE': 'Offline',
-    'OTHER_CAMPAIGNS': 'Other Campaigns'
+    'ORGANIC_SEARCH':'Organic','PAID_SEARCH':'Paid','DIRECT_TRAFFIC':'Direct',
+    'EMAIL_MARKETING':'Email','REFERRALS':'Referral','SOCIAL_MEDIA':'Social',
+    'PAID_SOCIAL':'Paid Social','AI_REFERRALS':'AI Ref','OFFLINE':'Offline','OTHER_CAMPAIGNS':'Campaign'
 };
-
 const SOURCE_CLASSES = {
-    'ORGANIC_SEARCH': 'src-organic',
-    'PAID_SEARCH': 'src-paid',
-    'DIRECT_TRAFFIC': 'src-direct',
-    'EMAIL_MARKETING': 'src-email',
-    'REFERRALS': 'src-referral',
-    'SOCIAL_MEDIA': 'src-social',
-    'PAID_SOCIAL': 'src-social',
-    'AI_REFERRALS': 'src-ai',
-    'OFFLINE': 'src-offline',
-    'OTHER_CAMPAIGNS': 'src-offline'
+    'ORGANIC_SEARCH':'src-organic','PAID_SEARCH':'src-paid','DIRECT_TRAFFIC':'src-direct',
+    'EMAIL_MARKETING':'src-email','REFERRALS':'src-referral','SOCIAL_MEDIA':'src-social',
+    'PAID_SOCIAL':'src-social','AI_REFERRALS':'src-ai','OFFLINE':'src-offline','OTHER_CAMPAIGNS':'src-offline'
 };
+const LC_LABELS = {'marketingqualifiedlead':'MQL','lead':'Lead','1232155415':'Nurture','subscriber':'Subscriber'};
+const LC_CLASSES = {'marketingqualifiedlead':'lc-mql','lead':'lc-lead','1232155415':'lc-nurture','subscriber':'lc-subscriber'};
 
-const LIFECYCLE_LABELS = {
-    'marketingqualifiedlead': 'MQL',
-    'lead': 'Lead',
-    '1232155415': 'Nurture',
-    'subscriber': 'Subscriber'
-};
-
-const LIFECYCLE_CLASSES = {
-    'marketingqualifiedlead': 'lc-mql',
-    'lead': 'lc-lead',
-    '1232155415': 'lc-nurture',
-    'subscriber': 'lc-subscriber'
-};
-
-let currentFilter = 'all';
-let currentSort = 'score-desc';
-let searchQuery = '';
+let currentFilter = 'all', currentSort = 'prob-desc', searchQuery = '';
 
 function classifySignal(sig) {
     const s = sig.toLowerCase();
-    if (s.includes('pricing') || s.includes('demo') || s.includes('compare') || s.includes('enterprise') || s.includes('contact'))
-        return 'signal-hot';
-    if (s.includes('this week') || s.includes('form submission') || s.includes('mql'))
-        return 'signal-hot';
-    if (s.includes('email click') || s.includes('sessions') || s.includes('page view'))
-        return 'signal-warm';
-    if (s.includes('src:'))
-        return 'signal-neutral';
+    if (s.includes('pricing') || s.includes('demo') || s.includes('compare') || s.includes('this week') || s.includes('form submission') || s.includes('mql')) return 'signal-hot';
+    if (s.includes('email click') || s.includes('sessions') || s.includes('page view')) return 'signal-warm';
+    if (s.includes('src:')) return 'signal-neutral';
     return 'signal-info';
-}
-
-function getScoreClass(score) {
-    if (score >= 120) return 'score-high';
-    if (score >= 100) return 'score-med';
-    return 'score-low';
 }
 
 function formatDate(d) {
     if (!d) return 'N/A';
-    const date = new Date(d);
-    const now = new Date();
-    const diff = (now - date) / (1000 * 60 * 60);
+    const date = new Date(d), now = new Date(), diff = (now - date) / 36e5;
     if (diff < 1) return 'Just now';
     if (diff < 24) return `${Math.floor(diff)}h ago`;
     if (diff < 168) return `${Math.floor(diff / 24)}d ago`;
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
-function renderStats(leads) {
-    const maxScore = Math.max(...leads.map(l => l.score));
-    const avgScore = Math.round(leads.reduce((s, l) => s + l.score, 0) / leads.length);
-    const mqls = leads.filter(l => l.lifecycle === 'marketingqualifiedlead').length;
-    const activeThisWeek = leads.filter(l => {
-        const sig = l.signals.join(' ');
-        return sig.includes('this week');
-    }).length;
+function probRing(pct, cls) {
+    const r = 18, c = 2 * Math.PI * r;
+    const offset = c - (pct / 100) * c;
+    return `<div class="prob-ring ${cls}">
+        <svg width="44" height="44" viewBox="0 0 44 44">
+            <circle class="bg" cx="22" cy="22" r="${r}"/>
+            <circle class="fg" cx="22" cy="22" r="${r}" stroke-dasharray="${c}" stroke-dashoffset="${offset}"/>
+        </svg>
+        <span class="prob-pct">${pct}%</span>
+    </div>`;
+}
 
+function renderTldr(leads) {
+    const top = leads[0];
+    const committees = leads.filter(l => l.committee >= 3);
+    const mqls = leads.filter(l => l.lifecycle === 'marketingqualifiedlead');
+    document.getElementById('tldr-content').innerHTML = `
+        <strong>${leads.length} leads scored</strong> by demo completion probability this week.
+        Top prospect: <strong>${top.name}</strong> at ${top.company || 'N/A'} (${top.demo_prob}% probability).
+        ${committees.length > 0 ? `<strong>${committees.length} accounts</strong> show buying committee signals (${committees.map(c => c.company).join(', ')}).` : ''}
+        ${mqls.length} are MQLs. <strong>Decision rule:</strong> prioritize accounts with 60%+ probability and multi-stakeholder engagement for same-week outreach.
+    `;
+}
+
+function renderStats(leads) {
+    const maxProb = Math.max(...leads.map(l => l.demo_prob));
+    const avgProb = Math.round(leads.reduce((s, l) => s + l.demo_prob, 0) / leads.length);
+    const mqls = leads.filter(l => l.lifecycle === 'marketingqualifiedlead').length;
+    const committees = leads.filter(l => l.committee >= 2).length;
     document.getElementById('stats-row').innerHTML = `
         <div class="stat-card">
-            <div class="stat-label">Top Intent Score</div>
-            <div class="stat-value green">${maxScore}</div>
+            <div class="stat-label">Top Demo Probability</div>
+            <div class="stat-value green">${maxProb}%</div>
             <div class="stat-sub">${leads[0]?.name || '-'}</div>
         </div>
         <div class="stat-card">
-            <div class="stat-label">Avg Intent Score</div>
-            <div class="stat-value amber">${avgScore}</div>
+            <div class="stat-label">Avg Demo Probability</div>
+            <div class="stat-value amber">${avgProb}%</div>
             <div class="stat-sub">across ${leads.length} leads</div>
         </div>
         <div class="stat-card">
             <div class="stat-label">MQLs in Pool</div>
-            <div class="stat-value accent">${mqls}</div>
+            <div class="stat-value primary">${mqls}</div>
             <div class="stat-sub">${Math.round(mqls/leads.length*100)}% of total</div>
         </div>
         <div class="stat-card">
-            <div class="stat-label">Active This Week</div>
-            <div class="stat-value cyan">${activeThisWeek}</div>
-            <div class="stat-sub">visited or clicked recently</div>
+            <div class="stat-label">Buying Committees</div>
+            <div class="stat-value olive">${committees}</div>
+            <div class="stat-sub">accounts with 2+ contacts</div>
         </div>
     `;
 }
 
+function renderActions(leads) {
+    const top3 = leads.slice(0, 3);
+    const grid = document.getElementById('action-grid');
+    const actions = [
+        { lead: top3[0], action: 'Book a personalized demo', reason: `Highest probability at ${top3[0]?.demo_prob}%. ${top3[0]?.signals.includes('visited /pricing') ? 'Already evaluated pricing.' : 'Deep engagement across multiple signals.'}` },
+        { lead: top3[1], action: 'Send multi-threaded outreach', reason: `${top3[1]?.committee >= 2 ? top3[1].committee + ' stakeholders engaged at ' + top3[1].company + '.' : 'Strong intent signals.'} Reference their ${top3[1]?.recent_form || 'recent engagement'}.` },
+        { lead: top3[2], action: 'Coordinate account-based play', reason: `${top3[2]?.committee >= 3 ? 'Buying committee forming: ' + top3[2].committee + ' contacts at ' + top3[2].company + '.' : 'Multiple strong signals converging.'} Move to sales-ready.` },
+    ];
+    grid.innerHTML = actions.map(a => `
+        <div class="action-card">
+            <span class="action-lead">${a.lead?.name || '-'} &middot; ${a.lead?.company || 'N/A'}</span>
+            <h4>${a.action}</h4>
+            <p>${a.reason}</p>
+        </div>
+    `).join('');
+}
+
 function renderLeads(leads) {
-    const maxScore = Math.max(...LEADS_DATA.map(l => l.score));
     const tbody = document.getElementById('leads-tbody');
     tbody.innerHTML = '';
-
     leads.forEach((lead, idx) => {
         const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : 'rank-other';
-        const scoreClass = getScoreClass(lead.score);
-        const pct = Math.round((lead.score / maxScore) * 100);
+        const probClass = lead.demo_prob >= 65 ? 'prob-high' : lead.demo_prob >= 55 ? 'prob-med' : 'prob-low';
         const srcClass = SOURCE_CLASSES[lead.source] || 'src-offline';
-        const srcLabel = SOURCE_LABELS[lead.source] || lead.source || 'Unknown';
-        const lcClass = LIFECYCLE_CLASSES[lead.lifecycle] || 'lc-subscriber';
-        const lcLabel = LIFECYCLE_LABELS[lead.lifecycle] || lead.lifecycle || '-';
-
-        // Filter out src: signals for the signal tags (shown separately)
-        const displaySignals = lead.signals.filter(s =>
-            !s.startsWith('src:') &&
-            s !== 'MQL' && s !== 'Lead' && s !== 'Nurture' && s !== 'Subscriber'
-        );
+        const srcLabel = SOURCE_LABELS[lead.source] || lead.source || '?';
+        const lcClass = LC_CLASSES[lead.lifecycle] || 'lc-subscriber';
+        const lcLabel = LC_LABELS[lead.lifecycle] || '-';
+        const displaySignals = lead.signals.filter(s => !s.startsWith('src:') && !['MQL','Lead','Nurture','Subscriber'].includes(s));
 
         const row = document.createElement('tr');
         row.innerHTML = `
             <td><div class="rank ${rankClass}">${idx + 1}</div></td>
-            <td>
-                <div class="score-cell ${scoreClass}">
-                    <span class="score-num">${lead.score}</span>
-                    <div class="score-bar-bg"><div class="score-bar" style="width:${pct}%"></div></div>
-                </div>
-            </td>
+            <td><div class="prob-cell">${probRing(lead.demo_prob, probClass)}</div></td>
+            <td><span class="intent-score">${lead.score}</span></td>
             <td>
                 <div class="lead-name">${lead.name}</div>
                 <div class="lead-email">${lead.email}</div>
                 ${lead.company ? `<div class="lead-company">${lead.company}</div>` : ''}
+                ${lead.committee >= 2 ? `<span class="committee-badge">${lead.committee} contacts</span>` : ''}
             </td>
             <td><span class="source-badge ${srcClass}">${srcLabel}</span></td>
             <td><span class="${lcClass}">${lcLabel}</span></td>
             <td class="metric ${lead.page_views >= 100 ? 'metric-highlight' : ''}">${lead.page_views.toLocaleString()}</td>
             <td class="metric ${lead.sessions >= 20 ? 'metric-highlight' : ''}">${lead.sessions}</td>
             <td class="metric ${lead.email_clicks >= 3 ? 'metric-highlight' : ''}">${lead.email_clicks}</td>
-            <td>
-                <div class="signals">
-                    ${displaySignals.slice(0, 5).map(s => `<span class="signal-tag ${classifySignal(s)}">${s}</span>`).join('')}
-                    ${displaySignals.length > 5 ? `<span class="signal-tag signal-neutral">+${displaySignals.length - 5} more</span>` : ''}
-                </div>
-            </td>
+            <td><div class="signals">${displaySignals.slice(0, 4).map(s => `<span class="signal-tag ${classifySignal(s)}">${s}</span>`).join('')}${displaySignals.length > 4 ? `<span class="signal-tag signal-neutral">+${displaySignals.length - 4}</span>` : ''}</div></td>
             <td><button class="expand-btn" data-id="${lead.id}">&#9654;</button></td>
         `;
         tbody.appendChild(row);
@@ -517,92 +790,46 @@ function renderLeads(leads) {
         const detailRow = document.createElement('tr');
         detailRow.className = 'detail-row';
         detailRow.id = `detail-${lead.id}`;
-        detailRow.innerHTML = `
-            <td colspan="10">
-                <div class="detail-grid">
-                    <div class="detail-item">
-                        <div class="detail-label">Last Page Visited</div>
-                        <div class="detail-value"><a href="${lead.last_url}" target="_blank">${lead.last_url ? new URL(lead.last_url).pathname.slice(0, 50) : 'N/A'}</a></div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Last Visit</div>
-                        <div class="detail-value">${formatDate(lead.last_visit)}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Last Email Click</div>
-                        <div class="detail-value">${formatDate(lead.last_email_click)}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Emails Opened</div>
-                        <div class="detail-value">${lead.email_opens}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Recent Form</div>
-                        <div class="detail-value">${lead.recent_form || 'N/A'}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">All Signals</div>
-                        <div class="detail-value">${lead.signals.join(', ')}</div>
-                    </div>
-                </div>
-            </td>
-        `;
+        let pathname = 'N/A';
+        try { pathname = new URL(lead.last_url).pathname.slice(0, 60); } catch(e) {}
+        detailRow.innerHTML = `<td colspan="11"><div class="detail-grid">
+            <div><div class="detail-label">Last Page Visited</div><div class="detail-value"><a href="${lead.last_url}" target="_blank">${pathname}</a></div></div>
+            <div><div class="detail-label">Last Visit</div><div class="detail-value">${formatDate(lead.last_visit)}</div></div>
+            <div><div class="detail-label">Last Email Click</div><div class="detail-value">${formatDate(lead.last_email_click)}</div></div>
+            <div><div class="detail-label">Emails Opened</div><div class="detail-value">${lead.email_opens}</div></div>
+            <div><div class="detail-label">Recent Form</div><div class="detail-value">${lead.recent_form || 'N/A'}</div></div>
+            <div><div class="detail-label">All Signals</div><div class="detail-value">${lead.signals.join(', ')}</div></div>
+        </div></td>`;
         tbody.appendChild(detailRow);
     });
 }
 
 function filterAndSort() {
-    let filtered = [...LEADS_DATA];
-
-    // Search
-    if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        filtered = filtered.filter(l =>
-            l.name.toLowerCase().includes(q) ||
-            l.email.toLowerCase().includes(q) ||
-            (l.company || '').toLowerCase().includes(q) ||
-            l.signals.some(s => s.toLowerCase().includes(q))
-        );
+    let f = [...LEADS_DATA];
+    if (searchQuery) { const q = searchQuery.toLowerCase(); f = f.filter(l => l.name.toLowerCase().includes(q) || l.email.toLowerCase().includes(q) || (l.company||'').toLowerCase().includes(q) || l.signals.some(s => s.toLowerCase().includes(q))); }
+    switch(currentFilter) {
+        case 'mql': f = f.filter(l => l.lifecycle === 'marketingqualifiedlead'); break;
+        case 'lead': f = f.filter(l => l.lifecycle === 'lead'); break;
+        case 'nurture': f = f.filter(l => l.lifecycle === '1232155415'); break;
+        case 'pricing': f = f.filter(l => l.signals.some(s => s.includes('/pricing'))); break;
+        case 'committee': f = f.filter(l => l.committee >= 2); break;
+        case 'email-active': f = f.filter(l => l.signals.some(s => s.includes('email click this week'))); break;
     }
-
-    // Filter
-    switch (currentFilter) {
-        case 'mql':
-            filtered = filtered.filter(l => l.lifecycle === 'marketingqualifiedlead');
-            break;
-        case 'lead':
-            filtered = filtered.filter(l => l.lifecycle === 'lead');
-            break;
-        case 'nurture':
-            filtered = filtered.filter(l => l.lifecycle === '1232155415');
-            break;
-        case 'pricing':
-            filtered = filtered.filter(l => l.signals.some(s => s.includes('/pricing')));
-            break;
-        case 'email-active':
-            filtered = filtered.filter(l => l.signals.some(s => s.includes('email click this week')));
-            break;
+    switch(currentSort) {
+        case 'prob-desc': f.sort((a,b) => b.demo_prob - a.demo_prob); break;
+        case 'score-desc': f.sort((a,b) => b.score - a.score); break;
+        case 'pageviews-desc': f.sort((a,b) => b.page_views - a.page_views); break;
+        case 'sessions-desc': f.sort((a,b) => b.sessions - a.sessions); break;
+        case 'clicks-desc': f.sort((a,b) => b.email_clicks - a.email_clicks); break;
     }
-
-    // Sort
-    switch (currentSort) {
-        case 'score-desc': filtered.sort((a, b) => b.score - a.score); break;
-        case 'score-asc': filtered.sort((a, b) => a.score - b.score); break;
-        case 'pageviews-desc': filtered.sort((a, b) => b.page_views - a.page_views); break;
-        case 'sessions-desc': filtered.sort((a, b) => b.sessions - a.sessions); break;
-        case 'clicks-desc': filtered.sort((a, b) => b.email_clicks - a.email_clicks); break;
-    }
-
-    renderStats(filtered);
-    renderLeads(filtered);
+    renderTldr(f);
+    renderStats(f);
+    renderLeads(f);
+    renderActions(f);
 }
 
-// Event Listeners
-document.getElementById('search').addEventListener('input', (e) => {
-    searchQuery = e.target.value;
-    filterAndSort();
-});
-
+// Events
+document.getElementById('search').addEventListener('input', e => { searchQuery = e.target.value; filterAndSort(); });
 document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -611,23 +838,21 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
         filterAndSort();
     });
 });
-
-document.getElementById('sort-select').addEventListener('change', (e) => {
-    currentSort = e.target.value;
-    filterAndSort();
-});
-
-document.addEventListener('click', (e) => {
+document.getElementById('sort-select').addEventListener('change', e => { currentSort = e.target.value; filterAndSort(); });
+document.addEventListener('click', e => {
     if (e.target.classList.contains('expand-btn')) {
-        const id = e.target.dataset.id;
-        const detail = document.getElementById(`detail-${id}`);
+        const detail = document.getElementById(`detail-${e.target.dataset.id}`);
         detail.classList.toggle('open');
         e.target.classList.toggle('open');
     }
 });
+document.getElementById('method-toggle').addEventListener('click', function() {
+    this.classList.toggle('open');
+    document.getElementById('method-panel').classList.toggle('open');
+});
 
 // Init
-document.getElementById('timestamp').textContent = `Updated: ${new Date().toLocaleString()}`;
+document.getElementById('timestamp').textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 filterAndSort();
 </script>
 </body>

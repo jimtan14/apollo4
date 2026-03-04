@@ -197,21 +197,33 @@
             border-radius: 0;
             padding: var(--space-6);
         }
-        .tldr-label {
+        .tldr-toggle {
             font-family: var(--font-mono);
             font-size: 11px;
             font-weight: 500;
             color: var(--green-200);
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            margin-bottom: var(--space-3);
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: 0;
+            transition: color 0.2s;
         }
+        .tldr-toggle:hover { color: var(--white); }
+        .tldr-toggle .arrow { transition: transform 0.2s; font-size: 10px; }
+        .tldr-toggle.open .arrow { transform: rotate(90deg); }
         .tldr-content {
+            display: none;
             font-family: var(--font-sans);
             font-size: 14px;
             line-height: 1.6;
             color: var(--green-100);
         }
+        .tldr-content.open { display: block; margin-top: var(--space-3); }
         .tldr-content strong { color: var(--white); font-weight: 600; }
         .tldr-summary { margin-bottom: var(--space-4); }
         .factors-section { margin-top: var(--space-4); border-top: 1px solid rgba(255,255,255,0.12); padding-top: var(--space-4); }
@@ -681,121 +693,60 @@
         .detail-value a { color: var(--green-500); text-decoration: none; }
         .detail-value a:hover { text-decoration: underline; }
 
-        /* ── Action section ── */
-        .action-section { padding: 0 var(--space-12); margin-bottom: var(--space-8); }
-        .action-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--space-4);
-        }
-        .action-label {
-            font-family: var(--font-mono);
-            font-size: 11px;
-            font-weight: 500;
-            color: var(--green-500);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-        .action-sub {
-            font-family: var(--font-sans);
-            font-size: 12px;
-            color: var(--text-tertiary);
-        }
-        .action-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
-        .action-card {
-            background: var(--white);
-            border: 1px solid var(--stroke-green);
-            border-radius: 0;
-            padding: var(--space-6);
+        /* ── Inline row actions ── */
+        .row-actions {
             display: flex;
             flex-direction: column;
-            gap: var(--space-3);
+            gap: 4px;
+            min-width: 120px;
         }
-        .action-step {
-            font-family: var(--font-mono);
-            font-size: 10px;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--text-tertiary);
-            padding: 2px 8px;
-            background: var(--green-50);
-            border: 1px solid var(--stroke-green);
-            align-self: flex-start;
-        }
-        .action-card h4 { font-family: var(--font-sans); font-size: 14px; font-weight: 600; }
-        .action-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
-        .action-card .action-lead {
-            font-family: var(--font-mono);
-            font-size: 11px;
-            font-weight: 500;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--green-500);
-            display: block;
-        }
-        .action-owner {
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-            padding-top: var(--space-2);
-            border-top: 1px solid var(--stroke-primary);
-        }
-        .owner-label {
-            font-family: var(--font-mono);
-            font-size: 10px;
-            font-weight: 500;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--text-tertiary);
-            flex-shrink: 0;
-        }
-        .owner-select {
+        .row-actions select {
             background: var(--white);
             border: 1px solid var(--stroke-primary);
-            padding: 5px 10px;
-            font-family: var(--font-sans);
-            font-size: 12px;
+            padding: 4px 6px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 500;
             color: var(--text-secondary);
             cursor: pointer;
             outline: none;
-            flex: 1;
+            letter-spacing: 0.04em;
         }
-        .owner-select:focus { border-color: var(--green-500); }
-        .action-notify {
+        .row-actions select:focus { border-color: var(--green-500); }
+        .row-action-btns {
             display: flex;
-            gap: var(--space-2);
+            gap: 4px;
         }
-        .notify-btn {
+        .row-action-btn {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 7px 12px;
+            gap: 4px;
+            padding: 4px 8px;
             font-family: var(--font-mono);
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 500;
             letter-spacing: 0.04em;
             text-decoration: none;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s;
             border: 1px solid;
             flex: 1;
             justify-content: center;
+            white-space: nowrap;
         }
-        .notify-slack {
+        .row-action-btn svg { flex-shrink: 0; }
+        .row-btn-slack {
             background: var(--white);
             border-color: var(--stroke-green);
             color: var(--green-500);
         }
-        .notify-slack:hover { background: var(--green-50); }
-        .notify-email {
+        .row-btn-slack:hover { background: var(--green-50); }
+        .row-btn-email {
             background: var(--white);
             border-color: var(--stroke-primary);
             color: var(--text-secondary);
         }
-        .notify-email:hover { background: var(--off-white); color: var(--text-primary); }
-        .notify-btn svg { flex-shrink: 0; }
+        .row-btn-email:hover { background: var(--off-white); color: var(--text-primary); }
 
         /* ── Footer ── */
         .footer {
@@ -909,10 +860,8 @@
                     <th>Lead</th>
                     <th>Source</th>
                     <th>Stage</th>
-                    <th class="metric">Views</th>
-                    <th class="metric">Sessions</th>
-                    <th class="metric">Clicks</th>
                     <th>Signals</th>
+                    <th>Actions</th>
                     <th style="width:36px"></th>
                 </tr>
             </thead>
@@ -922,17 +871,11 @@
 
     <div class="tldr">
         <div class="tldr-card">
-            <div class="tldr-label">TL;DR — Scoring factors</div>
+            <button class="tldr-toggle" id="tldr-toggle">
+                <span class="arrow">&#9654;</span> TL;DR — Scoring factors
+            </button>
             <div class="tldr-content" id="tldr-content"></div>
         </div>
-    </div>
-
-    <div class="action-section">
-        <div class="action-header">
-            <div class="action-label">3 Next Steps — Take Action</div>
-            <div class="action-sub">Notify the right owner via Slack or email to move these forward this week</div>
-        </div>
-        <div class="action-grid" id="action-grid"></div>
     </div>
 
     <div class="footer">
@@ -1103,62 +1046,10 @@ function renderStats(leads) {
         <div class="stat-card"><div class="stat-label">MQLs in pool</div><div class="stat-value green">${mqls}</div><div class="stat-sub">${Math.round(mqls/leads.length*100)}% of total</div></div>
         <div class="stat-card"><div class="stat-label">Buying committees</div><div class="stat-value">${coms}</div><div class="stat-sub">accounts with 2+ contacts</div></div>`;
 }
-function renderActions(leads) {
-    const t = leads.slice(0, 3), g = document.getElementById('action-grid');
-    const actions = [
-        {
-            lead: t[0],
-            action: 'Book a personalized demo',
-            reason: `Highest probability at ${t[0]?.demo_prob}%. ${t[0]?.signals.includes('visited /pricing') ? 'Already evaluated pricing.' : 'Strong multi-signal engagement.'}`,
-        },
-        {
-            lead: t[1],
-            action: 'Send multi-threaded outreach',
-            reason: `${t[1]?.committee >= 2 ? t[1].committee + ' stakeholders at ' + t[1].company + '.' : 'High intent signals.'} Reference their ${t[1]?.recent_form || 'recent activity'}.`,
-        },
-        {
-            lead: t[2],
-            action: 'Coordinate account-based play',
-            reason: `${t[2]?.committee >= 3 ? 'Buying committee: ' + t[2].committee + ' contacts at ' + t[2].company + '.' : 'Multiple signals converging.'} Move to sales-ready.`,
-        }
-    ];
-
-    g.innerHTML = actions.map((a, i) => {
-        const name = a.lead?.name || '-';
-        const company = a.lead?.company || 'N/A';
-        const emailSubject = encodeURIComponent(`[Pipeline] ${a.action}: ${name} at ${company}`);
-        const emailBody = encodeURIComponent(`Hi,\n\nAction needed from this week's Pipeline by Intent analysis:\n\n${a.action} for ${name} at ${company}.\n\n${a.reason}\n\nView the full dashboard for details.\n\n— Pipeline by Intent Analyzer`);
-        const slackText = encodeURIComponent(`Action needed: *${a.action}* for *${name}* at ${company}. ${a.reason}`);
-        const ownerOptions = NOTIFICATION_CONFIG.owners.map(o => `<option value="${o}">${o}</option>`).join('');
-
-        return `<div class="action-card">
-            <span class="action-step">Step ${i + 1}</span>
-            <span class="action-lead">${name} — ${company}</span>
-            <h4>${a.action}</h4>
-            <p>${a.reason}</p>
-            <div class="action-owner">
-                <span class="owner-label">Owner</span>
-                <select class="owner-select">
-                    <option value="">Assign...</option>
-                    ${ownerOptions}
-                </select>
-            </div>
-            <div class="action-notify">
-                <a href="https://${NOTIFICATION_CONFIG.slackWorkspace}.slack.com/archives/${NOTIFICATION_CONFIG.slackChannel}" target="_blank" class="notify-btn notify-slack" title="Open #${NOTIFICATION_CONFIG.slackChannel} in Slack">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg>
-                    Slack
-                </a>
-                <a href="mailto:?subject=${emailSubject}&body=${emailBody}" class="notify-btn notify-email" title="Compose email notification">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
-                    Email
-                </a>
-            </div>
-        </div>`;
-    }).join('');
-}
 function renderLeads(leads) {
     const tbody=document.getElementById('leads-tbody'); tbody.innerHTML='';
     const maxProb = Math.max(...leads.map(l => l.demo_prob));
+    const ownerOpts = NOTIFICATION_CONFIG.owners.map(o => `<option value="${o}">${o}</option>`).join('');
     leads.forEach((l,i)=>{
         const rc=i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-other';
         const pc=l.demo_prob>=65?'prob-high':l.demo_prob>=55?'prob-med':'prob-low';
@@ -1167,6 +1058,8 @@ function renderLeads(leads) {
         const ds=l.signals.filter(s=>!s.startsWith('src:')&&!['MQL','Lead','Nurture','Subscriber'].includes(s));
         const pct=Math.round(l.demo_prob/maxProb*100);
         const hasPricing=l.signals.some(s=>s.includes('/pricing'));
+        const emailSubject = encodeURIComponent(`[Pipeline] Action needed: ${l.name} at ${l.company||'N/A'}`);
+        const emailBody = encodeURIComponent(`Hi,\n\nAction needed from this week's Pipeline by Intent analysis:\n\n${l.name} at ${l.company||'N/A'} — Demo probability: ${l.demo_prob}%\n\nView the full dashboard for details.\n\n— Pipeline by Intent Analyzer`);
         const row=document.createElement('tr');
         if(hasPricing) row.className='pricing-row';
         row.innerHTML=`
@@ -1176,18 +1069,25 @@ function renderLeads(leads) {
             <td><div class="lead-name">${l.name}</div><div class="lead-email">${l.email}</div>${l.company?`<div class="lead-company">${l.company}</div>`:''}${l.title?`<div class="lead-title">${l.title}</div>`:''}${hasPricing?`<span class="pricing-badge">visited /pricing</span>`:''}${l.committee>=2?`<span class="committee-badge">${l.committee} contacts</span>`:''}</td>
             <td><span class="source-badge ${sc}">${sl}</span></td>
             <td><span class="lifecycle-cell ${lcc}">${lcl}</span></td>
-            <td class="metric ${l.page_views>=100?'metric-highlight':''}">${l.page_views.toLocaleString()}</td>
-            <td class="metric ${l.sessions>=20?'metric-highlight':''}">${l.sessions}</td>
-            <td class="metric ${l.email_clicks>=3?'metric-highlight':''}">${l.email_clicks}</td>
             <td><div class="signals">${ds.slice(0,4).map(s=>`<span class="signal-tag ${classifySignal(s)}">${s}</span>`).join('')}${ds.length>4?`<span class="signal-tag signal-neutral">+${ds.length-4}</span>`:''}</div></td>
+            <td><div class="row-actions">
+                <select><option value="">Assign...</option>${ownerOpts}</select>
+                <div class="row-action-btns">
+                    <a href="https://${NOTIFICATION_CONFIG.slackWorkspace}.slack.com/archives/${NOTIFICATION_CONFIG.slackChannel}" target="_blank" class="row-action-btn row-btn-slack" title="Notify on Slack"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg>Slack</a>
+                    <a href="mailto:?subject=${emailSubject}&body=${emailBody}" class="row-action-btn row-btn-email" title="Send email"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>Email</a>
+                </div>
+            </div></td>
             <td><button class="expand-btn" data-id="${l.id}">&#9654;</button></td>`;
         tbody.appendChild(row);
         const dr=document.createElement('tr'); dr.className='detail-row'; dr.id=`detail-${l.id}`;
         let pn='N/A'; try{pn=new URL(l.last_url).pathname.slice(0,60)}catch(e){}
-        dr.innerHTML=`<td colspan="11"><div class="detail-grid">
+        dr.innerHTML=`<td colspan="9"><div class="detail-grid">
             <div><div class="detail-label">Last page visited</div><div class="detail-value"><a href="${l.last_url}" target="_blank">${pn}</a></div></div>
             <div><div class="detail-label">Last visit</div><div class="detail-value">${formatDate(l.last_visit)}</div></div>
             <div><div class="detail-label">Last email click</div><div class="detail-value">${formatDate(l.last_email_click)}</div></div>
+            <div><div class="detail-label">Page views</div><div class="detail-value">${l.page_views.toLocaleString()}</div></div>
+            <div><div class="detail-label">Sessions</div><div class="detail-value">${l.sessions}</div></div>
+            <div><div class="detail-label">Email clicks</div><div class="detail-value">${l.email_clicks}</div></div>
             <div><div class="detail-label">Emails opened</div><div class="detail-value">${l.email_opens}</div></div>
             <div><div class="detail-label">Recent form</div><div class="detail-value">${l.recent_form||'N/A'}</div></div>
             <div><div class="detail-label">All signals</div><div class="detail-value">${l.signals.join(', ')}</div></div>
@@ -1212,7 +1112,7 @@ function filterAndSort() {
         case 'sessions-desc':f.sort((a,b)=>b.sessions-a.sessions);break;
         case 'clicks-desc':f.sort((a,b)=>b.email_clicks-a.email_clicks);break;
     }
-    renderTldr(f); renderStats(f); renderLeads(f); renderActions(f);
+    renderTldr(f); renderStats(f); renderLeads(f);
 }
 
 // ── Event listeners ──
@@ -1253,6 +1153,12 @@ document.addEventListener('click', e => {
 document.getElementById('how-to-toggle').addEventListener('click', function() {
     this.classList.toggle('open');
     document.getElementById('how-to-panel').classList.toggle('open');
+});
+
+// Toggle scoring factors
+document.getElementById('tldr-toggle').addEventListener('click', function() {
+    this.classList.toggle('open');
+    document.getElementById('tldr-content').classList.toggle('open');
 });
 
 // ── Init ──

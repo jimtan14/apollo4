@@ -196,8 +196,8 @@
         /* ── TL;DR ── */
         .tldr { padding: 0 var(--space-12) var(--space-8); }
         .tldr-card {
-            background: var(--green-50);
-            border: 1px solid var(--stroke-green);
+            background: var(--green-600);
+            border: 1px solid var(--green-600);
             border-radius: 0;
             padding: var(--space-6);
         }
@@ -205,7 +205,7 @@
             font-family: var(--font-mono);
             font-size: 11px;
             font-weight: 500;
-            color: var(--green-500);
+            color: var(--green-200);
             text-transform: uppercase;
             letter-spacing: 0.08em;
             margin-bottom: var(--space-3);
@@ -214,33 +214,33 @@
             font-family: var(--font-sans);
             font-size: 14px;
             line-height: 1.6;
-            color: var(--text-secondary);
+            color: var(--green-100);
         }
-        .tldr-content strong { color: var(--text-primary); font-weight: 600; }
+        .tldr-content strong { color: var(--white); font-weight: 600; }
         .tldr-summary { margin-bottom: var(--space-4); }
-        .factors-section { margin-top: var(--space-4); border-top: 1px solid var(--stroke-green); padding-top: var(--space-4); }
+        .factors-section { margin-top: var(--space-4); border-top: 1px solid rgba(255,255,255,0.12); padding-top: var(--space-4); }
         .factors-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3); }
         .factors-label {
             font-family: var(--font-mono);
             font-size: 11px;
             font-weight: 500;
-            color: var(--green-500);
+            color: var(--interaction);
             text-transform: uppercase;
             letter-spacing: 0.08em;
         }
         .factors-sub {
             font-family: var(--font-sans);
             font-size: 12px;
-            color: var(--text-tertiary);
+            color: var(--green-100);
         }
-        .factors-list { display: flex; flex-direction: column; gap: var(--space-2); }
+        .factors-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
         .factor-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: var(--space-2) var(--space-3);
-            background: var(--white);
-            border: 1px solid var(--stroke-green);
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
             gap: var(--space-4);
         }
         .factor-main { flex: 1; min-width: 0; }
@@ -248,13 +248,13 @@
             font-family: var(--font-sans);
             font-size: 13px;
             font-weight: 500;
-            color: var(--text-primary);
+            color: var(--white);
             display: block;
         }
         .factor-desc {
             font-family: var(--font-sans);
             font-size: 11px;
-            color: var(--text-tertiary);
+            color: var(--green-100);
             display: block;
             margin-top: 1px;
         }
@@ -265,9 +265,9 @@
             flex-shrink: 0;
         }
         .weight-btn {
-            background: var(--white);
-            border: 1px solid var(--stroke-primary);
-            color: var(--text-tertiary);
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--green-100);
             cursor: pointer;
             font-size: 14px;
             font-family: var(--font-mono);
@@ -280,12 +280,12 @@
             line-height: 1;
             padding: 0;
         }
-        .weight-btn:hover { border-color: var(--green-500); color: var(--green-500); }
+        .weight-btn:hover { border-color: var(--interaction); color: var(--interaction); }
         .weight-value {
             font-family: var(--font-mono);
             font-size: 12px;
             font-weight: 500;
-            color: var(--green-500);
+            color: var(--interaction);
             letter-spacing: 0.08em;
             min-width: 32px;
             text-align: center;
@@ -300,13 +300,13 @@
         .factors-total {
             font-family: var(--font-mono);
             font-size: 11px;
-            color: var(--text-tertiary);
+            color: var(--green-100);
             letter-spacing: 0.04em;
         }
         .factors-reset {
             background: none;
-            border: 1px solid var(--stroke-primary);
-            color: var(--text-tertiary);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--green-100);
             font-family: var(--font-mono);
             font-size: 10px;
             font-weight: 500;
@@ -316,7 +316,7 @@
             padding: 4px 10px;
             transition: all 0.2s;
         }
-        .factors-reset:hover { color: var(--green-500); border-color: var(--stroke-green); }
+        .factors-reset:hover { color: var(--interaction); border-color: var(--interaction); }
 
         /* ── Stats ── */
         .stats-row {
@@ -826,6 +826,7 @@
             .stats-row { grid-template-columns: repeat(2, 1fr); }
             .action-grid { grid-template-columns: 1fr; }
             .method-grid { grid-template-columns: repeat(2, 1fr); }
+            .factors-list { grid-template-columns: repeat(2, 1fr); }
             .signals { max-width: 220px; }
             .how-to-content ul { grid-template-columns: 1fr; }
         }
@@ -836,6 +837,7 @@
             .search-box { width: 100%; }
             .table-container, .tldr, .action-section, .methodology, .how-to-use { padding-left: 24px; padding-right: 24px; }
             .detail-grid { grid-template-columns: 1fr; }
+            .factors-list { grid-template-columns: 1fr; }
         }
     </style>
 </head>

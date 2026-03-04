@@ -130,39 +130,35 @@
 
         /* ── How to use ── */
         .how-to-use {
-            padding: var(--space-6) var(--space-12) 0;
+            padding: var(--space-4) var(--space-12) 0;
         }
-        .how-to-card {
-            background: var(--white);
-            border: 1px solid var(--stroke-primary);
-            border-radius: 0;
-            padding: var(--space-6);
-        }
-        .how-to-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--space-3);
-        }
-        .how-to-label {
+        .how-to-toggle {
             font-family: var(--font-mono);
             font-size: 11px;
             font-weight: 500;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
             letter-spacing: 0.08em;
-        }
-        .how-to-dismiss {
-            background: none;
-            border: 1px solid var(--stroke-primary);
+            text-transform: uppercase;
             color: var(--text-tertiary);
+            background: none;
+            border: none;
             cursor: pointer;
-            font-size: 16px;
-            padding: 2px 8px;
-            line-height: 1;
-            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) 0;
+            transition: color 0.2s;
         }
-        .how-to-dismiss:hover { color: var(--text-primary); border-color: var(--stroke-green); }
+        .how-to-toggle:hover { color: var(--green-500); }
+        .how-to-toggle .arrow { transition: transform 0.2s; font-size: 10px; }
+        .how-to-toggle.open .arrow { transform: rotate(90deg); }
+        .how-to-panel {
+            display: none;
+            background: var(--white);
+            border: 1px solid var(--stroke-primary);
+            padding: var(--space-6);
+            margin: var(--space-3) 0 0;
+        }
+        .how-to-panel.open { display: block; }
         .how-to-content {
             font-size: 13px;
             color: var(--text-secondary);
@@ -865,11 +861,10 @@
     </div>
 
     <div class="how-to-use" id="how-to-use">
-        <div class="how-to-card">
-            <div class="how-to-header">
-                <span class="how-to-label">How to use this page</span>
-                <button class="how-to-dismiss" id="dismiss-howto" title="Dismiss">&times;</button>
-            </div>
+        <button class="how-to-toggle" id="how-to-toggle">
+            <span class="arrow">&#9654;</span> How to use this page
+        </button>
+        <div class="how-to-panel" id="how-to-panel">
             <div class="how-to-content">
                 <p>This dashboard ranks your <strong>top prospective accounts by demo booking probability</strong> — a composite score based on engagement signals from HubSpot. Use it to prioritize weekly outreach and coordinate across sales and marketing.</p>
                 <ul>
@@ -885,15 +880,6 @@
     </div>
 
     <div class="stats-row" id="stats-row"></div>
-
-    <div class="methodology">
-        <button class="methodology-toggle" id="method-toggle">
-            <span class="arrow">&#9654;</span> How the demo probability score works
-        </button>
-        <div class="methodology-panel" id="method-panel">
-            <div class="method-grid" id="method-grid"></div>
-        </div>
-    </div>
 
     <div class="controls">
         <input type="text" class="search-box" id="search" placeholder="Search leads, companies, emails...">
@@ -1107,10 +1093,6 @@ function renderTldr(leads) {
 
     document.getElementById('tldr-content').innerHTML = html;
 
-    // Also sync methodology panel
-    document.getElementById('method-grid').innerHTML = scoringFactors.map(f =>
-        `<div class="method-item"><span class="label">${f.name}</span><span class="pts">+${f.weight}</span></div>`
-    ).join('');
 }
 function renderStats(leads) {
     const mx=Math.max(...leads.map(l=>l.demo_prob)), av=Math.round(leads.reduce((s,l)=>s+l.demo_prob,0)/leads.length);
@@ -1243,7 +1225,6 @@ document.addEventListener('click',e=>{
         e.target.classList.toggle('open');
     }
 });
-document.getElementById('method-toggle').addEventListener('click',function(){this.classList.toggle('open');document.getElementById('method-panel').classList.toggle('open');});
 
 // Weight adjustment
 document.addEventListener('click', e => {
@@ -1268,14 +1249,11 @@ document.addEventListener('click', e => {
     }
 });
 
-// Dismiss how-to-use
-document.getElementById('dismiss-howto').addEventListener('click', () => {
-    document.getElementById('how-to-use').style.display = 'none';
-    localStorage.setItem('apollo4_howto_dismissed', '1');
+// Toggle how-to-use
+document.getElementById('how-to-toggle').addEventListener('click', function() {
+    this.classList.toggle('open');
+    document.getElementById('how-to-panel').classList.toggle('open');
 });
-if (localStorage.getItem('apollo4_howto_dismissed') === '1') {
-    document.getElementById('how-to-use').style.display = 'none';
-}
 
 // ── Init ──
 document.getElementById('timestamp').textContent = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});

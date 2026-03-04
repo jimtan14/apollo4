@@ -961,15 +961,15 @@
 // Changes persist in localStorage.
 // ══════════════════════════════════════════════════════════════
 const DEFAULT_SCORING_FACTORS = [
-    { id: 'committee',  name: 'Buying committee (4+ contacts)',  weight: 25, description: 'Multi-stakeholder engagement signals serious evaluation' },
-    { id: 'intent',     name: 'Base intent score (normalized)',  weight: 30, description: 'Composite behavioral score from all website activity' },
-    { id: 'pricing',    name: 'Visited /pricing page',           weight: 15, description: 'Pricing evaluation indicates active budget consideration' },
-    { id: 'mql',        name: 'MQL lifecycle stage',             weight: 12, description: 'Marketing qualified through automated lead scoring' },
-    { id: 'active',     name: 'Active this week (email + visit)',weight: 15, description: 'Recent multi-channel engagement shows current interest' },
-    { id: 'form',       name: 'High-intent form (demo request)', weight: 15, description: 'Direct expression of interest through form submission' },
-    { id: 'email',      name: 'Email engagement ratio',          weight: 8,  description: 'Consistent email open and click behavior over time' },
-    { id: 'sessions',   name: 'Deep session count (50+)',        weight: 8,  description: 'Sustained research behavior across multiple visits' },
-    { id: 'referral',   name: 'Referral source quality',         weight: 7,  description: 'Higher-quality traffic sources score higher' },
+    { id: 'committee',  name: 'Buying committee (4+ contacts)',  weight: 19, description: 'Multi-stakeholder engagement signals serious evaluation' },
+    { id: 'intent',     name: 'Base intent score (normalized)',  weight: 22, description: 'Composite behavioral score from all website activity' },
+    { id: 'pricing',    name: 'Visited /pricing page',           weight: 11, description: 'Pricing evaluation indicates active budget consideration' },
+    { id: 'mql',        name: 'MQL lifecycle stage',             weight: 9,  description: 'Marketing qualified through automated lead scoring' },
+    { id: 'active',     name: 'Active this week (email + visit)',weight: 11, description: 'Recent multi-channel engagement shows current interest' },
+    { id: 'form',       name: 'High-intent form (demo request)', weight: 11, description: 'Direct expression of interest through form submission' },
+    { id: 'email',      name: 'Email engagement ratio',          weight: 6,  description: 'Consistent email open and click behavior over time' },
+    { id: 'sessions',   name: 'Deep session count (50+)',        weight: 6,  description: 'Sustained research behavior across multiple visits' },
+    { id: 'referral',   name: 'Referral source quality',         weight: 5,  description: 'Higher-quality traffic sources score higher' },
 ];
 
 function loadFactors() {

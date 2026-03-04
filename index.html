@@ -57,6 +57,9 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         .header-left { display: flex; align-items: center; gap: var(--space-6); }
         .logo-svg { height: 24px; width: auto; }
@@ -804,10 +807,8 @@
             <div class="header-title">Pipeline by intent analyzer</div>
         </div>
         <div class="header-right">
-            <span class="pill-green pill">LIVE</span>
-            <span class="pill pill-outline">HUBSPOT MCP</span>
-            <span class="refresh-badge" id="refresh-badge"></span>
             <span class="timestamp" id="timestamp"></span>
+            <a href="https://app.hubspot.com/contacts/21510907" target="_blank" class="pill-green pill" style="text-decoration:none;">HUBSPOT &rarr;</a>
         </div>
     </div>
 
@@ -1162,8 +1163,7 @@ document.getElementById('tldr-toggle').addEventListener('click', function() {
 });
 
 // ── Init ──
-document.getElementById('timestamp').textContent = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-renderRefreshBadge();
+document.getElementById('timestamp').textContent = 'Last refresh: ' + new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 filterAndSort();
 </script>
 </body>

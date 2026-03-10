@@ -891,6 +891,7 @@
         <button class="filter-btn" data-filter="pricing">Pricing</button>
         <button class="filter-btn" data-filter="committee">Committee</button>
         <button class="filter-btn" data-filter="email-active">Email active</button>
+        <button class="filter-btn" data-filter="tal-tier">TAL Tier</button>
         <select class="sort-select" id="sort-select">
             <option value="prob-desc">DEMO PROB: HIGH</option>
             <option value="score-desc">INTENT: HIGH</option>
@@ -1173,6 +1174,7 @@ function filterAndSort() {
         case 'pricing':f=f.filter(l=>l.signals.some(s=>s.includes('/pricing')));break;
         case 'committee':f=f.filter(l=>l.committee>=2);break;
         case 'email-active':f=f.filter(l=>l.signals.some(s=>s.includes('email click this week')));break;
+        case 'tal-tier':f=f.filter(l=>l.tal_tier&&l.tal_tier.trim().length>0&&l.tal_tier.trim()!=='Excluded');break;
     }
     switch(currentSort){
         case 'prob-desc':f.sort((a,b)=>b.demo_prob-a.demo_prob);break;
